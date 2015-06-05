@@ -1,6 +1,8 @@
 FactoryGirl.define do
+  sequence(:body) { |n| "Example body #{n}" }
+
   factory :answer do
-    body 'MyText'
+    body
     association :question
   end
 
