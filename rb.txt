@@ -1,6 +1,0 @@
-
-QuestionsController
-  GET #index
-    populates an array of all questions
-    renders index view
-  GET #show

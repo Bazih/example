@@ -1,0 +1,8 @@
+-if flash[:notice]
+  div.notice = flash[:notice]
+h1
+  = @question.title
+p
+  = @question.body
+
+= link_to 'to questions', questions_path

@@ -19,8 +19,9 @@ class QuestionsController < ApplicationController
     @question = Question.new(question_params)
 
     if @question.save
-      redirect_to @question
+      redirect_to @question, notice: 'Question successfully created!'
     else
+      flash.now[:error] = 'Error, check the name or text of the question'
       render :new
     end
   end

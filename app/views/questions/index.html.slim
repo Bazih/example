@@ -1,0 +1,14 @@
+h1 Questions
+
+.row
+  .col-md-8.text-left
+    = link_to 'New question', new_question_path, class: 'btn btn-default'
+br
+.row
+  .col-md-8.text-left
+    h4 Question
+
+.row
+  .col-md-8.text-left
+    -@questions.each do |f|
+      p.field=f.title
