@@ -2,7 +2,7 @@ h1 Questions
 
 .row
   .col-md-8.text-left
-    = link_to 'New question', new_question_path, class: 'btn btn-default'
+    = link_to 'Create question', new_question_path, class: 'btn btn-default'
 br
 .row
   .col-md-8.text-left
@@ -11,4 +11,7 @@ br
 .row
   .col-md-8.text-left
     -@questions.each do |f|
-      p.field=f.title
+      p.field=link_to f.title, question_path(f.id)
+.row
+  .col-md-8.text-right
+

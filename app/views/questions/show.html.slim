@@ -1,8 +1,41 @@
+h1= @question.title
 -if flash[:notice]
-  div.notice = flash[:notice]
-h1
-  = @question.title
-p
-  = @question.body
+  h3.notice = flash[:notice]
 
-= link_to 'to questions', questions_path
+h3= @question.body
+br
+br
+
+.row
+  .col-md-8 Answers:
+
+-if flash[:notice_answer]
+  h4.notice = flash[:notice_answer]
+br
+table
+  thead
+    tr
+      td Number
+      td Body
+      td
+      td
+  thead
+    - @answers.each do |f|
+      tr
+        td= f.id
+        td= f.body
+        td= link_to 'Edit answer', edit_answer_path(f.id), class: 'btn btn-xs btn-destroy'
+        td= link_to 'Delete answer', answer_path(f.id), method: :delete, class: 'btn btn-xs btn-destroy'
+
+
+
+h1 Create new answer
+.row
+  .col-md-8.text-left
+    = form_for [@question, @answer] do |f|
+      p= f.label :body, 'Enter your answer:'
+      p= f.text_area :body
+      p= f.submit 'Save answer'
+
+.row
+  .col-md-1= link_to 'To questions', questions_path, class: 'btn btn-default'

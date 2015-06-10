@@ -1,4 +1,5 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -6,10 +7,13 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @answers = @question.answers
+    @answer = Answer.new(:question => @question)
   end
 
   def new
     @question = Question.new
+    @question.answers.build
   end
 
   def edit

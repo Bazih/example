@@ -1,22 +1,17 @@
 class AnswersController < ApplicationController
-  before_action :load_question, only: [:index, :create]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :load_question, except: [:edit, :destroy]
   before_action :load_answer, only: [:edit, :update, :destroy]
 
-  def index
-    @answers = @question.answers
-  end
-
-  def new
-    @answer = Answer.new
-  end
-
-  def create
+   def create
     @answer = @question.answers.new(answer_params)
 
     if @answer.save
+      flash[:notice_answer] = 'Your answer successfully created'
       redirect_to @question
     else
-      render :new
+      flash[:notice_answer] = 'Your answer no created'
+      redirect_to @question
     end
   end
 
@@ -25,15 +20,18 @@ class AnswersController < ApplicationController
 
   def update
     if @answer.update(answer_params)
+      flash[:notice_answer] = 'Your answer successfully update'
       redirect_to @answer.question
     else
+      flash[:notice_answer] = 'Your answer not update'
       render :edit
     end
   end
 
   def destroy
     @answer.destroy
-    redirect_to @answer.question
+    flash[:notice_answer] = 'Your answer delete'
+    redirect_to question_answers_path
   end
 
   private
@@ -47,6 +45,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, :question_id)
   end
 end
