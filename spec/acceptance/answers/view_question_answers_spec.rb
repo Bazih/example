@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 feature 'View all the answers at question', %q{
-View all the answers to the question
-The user sees the answers to questions
-I want to see all the answers to the question
+  View all the answers to the question
+  The user sees the answers to questions
+  I want to see all the answers to the question
 } do
   given!(:question) { create(:question) }
   given!(:answers) { create_list(:answer, 4, question: question) }

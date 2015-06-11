@@ -81,7 +81,8 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'when invalid attributes' do
       it 'does not save the question' do
-        expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
+        expect { post :create, question: attributes_for(:invalid_question) }
+            .to_not change(Question, :count)
       end
 
       it 're-renders new view' do
@@ -129,15 +130,28 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'DELETE #destroy' do
     sign_in_user
-    before { question }
 
-    it 'deletes question' do
-      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+    context 'by author of question' do
+      let!(:user_question) { create(:question, user: subject.current_user) }
+
+      it 'deletes question' do
+        expect { delete :destroy, id: user_question }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to index view' do
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirect to index view' do
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
+    context 'by non-author' do
+      let(:author) { create(:user) }
+      let!(:another_user_question) { create(:question, user: author) }
+
+      it 'does not delete question' do
+        expect { delete :destroy, id: another_user_question }
+            .to_not change(Question, :count)
+      end
     end
   end
 end

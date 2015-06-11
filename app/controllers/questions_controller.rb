@@ -39,8 +39,14 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy
-    redirect_to questions_path
+    if @question.user_id == current_user.id
+      @question.destroy
+      flash[:notice] = 'Your question was successfully deleted'
+      redirect_to questions_path
+    else
+      flash[:notice] = 'You are not the creator of the is question.'
+      redirect_to questions_path
+    end
   end
 
   private
