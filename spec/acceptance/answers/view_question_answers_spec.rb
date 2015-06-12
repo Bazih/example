@@ -5,8 +5,10 @@ feature 'View all the answers at question', %q{
   The user sees the answers to questions
   I want to see all the answers to the question
 } do
-  given!(:question) { create(:question) }
-  given!(:answers) { create_list(:answer, 4, question: question) }
+
+  given(:user) { create(:user) }
+  given!(:question) { create(:question, user: user) }
+  given!(:answers) { create_list(:answer, 4, question: question, user: user) }
 
   scenario 'when can view all answers at question' do
     visit question_path(question)

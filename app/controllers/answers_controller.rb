@@ -1,10 +1,12 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, except: [:edit, :destroy]
-  before_action :load_answer, only: [:edit, :update, :destroy]
+  before_action :load_question, except: [:edit, :update, :destroy]
+  before_action :load_answer, except: [:create]
+  before_action :owner_answer, except: [:create]
 
    def create
     @answer = @question.answers.new(answer_params)
+    @answer.user = current_user
 
     if @answer.save
       flash[:notice_answer] = 'Your answer successfully created'
@@ -31,7 +33,7 @@ class AnswersController < ApplicationController
   def destroy
     @answer.destroy
     flash[:notice_answer] = 'Your answer delete'
-    redirect_to question_answers_path
+    redirect_to @answer.question
   end
 
   private
@@ -46,5 +48,9 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body, :question_id)
+  end
+
+  def owner_answer
+    redirect_to question_path, notice: 'Access denied' unless @answer.user_id == current_user.id
   end
 end

@@ -5,8 +5,8 @@ feature 'Veiw all questions', %q{
   Browse all the questions, not to be repeated
   User to view all questions
 } do
-
-  given!(:questions) { create_list(:question, 2) }
+  given(:user) { create(:user) }
+  given!(:questions) { create_list(:question, 2, user: user) }
 
   scenario 'when the user can view all questions' do
     visit questions_path
