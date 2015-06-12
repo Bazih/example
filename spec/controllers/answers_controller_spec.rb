@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer, question: question) }
-  let(:answers) { create_list(:answers, 2, question: question) }
+  let(:user) {create (:user) }
+  let(:question) { create(:question, user: user) }
+  let(:answer) { create(:answer, question: question, user: user) }
+
 
   describe 'POST #create' do
     sign_in_user
@@ -33,7 +34,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'GET #edit' do
     sign_in_user
-
+    let(:answer) { create(:answer, question: question, user: @user) }
     before { get :edit, id: answer, question_id: question }
 
     it 'assigns the requested answer to @answer' do
@@ -47,51 +48,83 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #update' do
     sign_in_user
+    context 'update is owner user' do
+      let(:answer) { create(:answer, question: question, user: @user) }
 
-    context 'when valid attributes' do
-      before { patch :update, id: answer, question_id: question, answer: { body: 'new body' } }
+      context 'when valid attributes' do
+        before { patch :update, id: answer, question_id: question, answer: { body: 'new body' } }
 
-      it 'assigns the requested answer to @answer' do
-        puts answer
-        expect(assigns(:answer)).to eq answer
+        it 'assigns the requested answer to @answer' do
+          expect(assigns(:answer)).to eq answer
+        end
+
+        it 'change answer attributes' do
+          answer.reload
+          expect(answer.body).to eq 'new body'
+        end
+
+        it 'redirects to the updated answer' do
+          expect(answer).to redirect_to question
+        end
       end
 
-      it 'change answer attributes' do
-        answer.reload
-        expect(answer.body).to eq 'new body'
-      end
+      context 'when invalid attributes' do
+        before { patch :update, id: answer, question_id: question, answer: { body: nil } }
 
-      it 'redirects to the updated answer' do
-        expect(answer).to redirect_to question
+        it 'does not change answer attributes' do
+          answer.reload
+          expect(answer.body).to eq answer.body
+        end
+
+        it 're-render edit view' do
+          expect(response).to render_template :edit
+        end
       end
     end
 
-    context 'when invalid attributes' do
-      before { patch :update, id: answer, question_id: question, answer: { body: nil } }
+    context 'update is non owner user' do
+      before { patch :update, question_id: question, id: answer, answer: { body: 'text body' } }
 
-      it 'does not change answer attributes' do
-        answer.reload
+      it 'does not change answer attributes'do
+        question.reload
         expect(answer.body).to eq answer.body
       end
 
-      it 're-render edit view' do
-        expect(response).to render_template :edit
+      it 'redirect to question' do
+        expect(response).to redirect_to question_path
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    sign_in_user
 
-    before { answer }
+    context 'owner delete question' do
+      sign_in_user
+      let(:answer) { create(:answer, question: question, user: @user) }
+      before { answer }
 
-    it 'deletes answer' do
-      expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by(-1)
+      it 'deletes answer' do
+        expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirect to question view' do
+        delete :destroy, id: answer
+        expect(response).to redirect_to question
+      end
     end
 
-    it 'redirect to question view' do
-      delete :destroy, id: answer
-      expect(response).to redirect_to question
+    context 'non-owner delete question' do
+      before { question }
+      sign_in_user
+
+      it 'does not delete question' do
+        expect{ delete :destroy, id: answer, question_id: question }.to change(Answer, :count)
+      end
+
+      it 'redirect to root path' do
+        delete :destroy, id: answer
+        expect(response).to redirect_to question_path
+      end
     end
   end
 

@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :owner_question, only: [:edit, :update, :destroy]
 
   def index
     @questions = Question.all
@@ -21,6 +22,7 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
+    @question.user = current_user
 
     if @question.save
       redirect_to @question, notice: 'Question successfully created!'
@@ -39,14 +41,9 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if @question.user_id == current_user.id
-      @question.destroy
-      flash[:notice] = 'Your question was successfully deleted'
-      redirect_to questions_path
-    else
-      flash[:notice] = 'You are not the creator of the is question.'
-      redirect_to questions_path
-    end
+    @question.destroy
+    flash[:notice] = 'Your question was successfully deleted'
+    redirect_to questions_path
   end
 
   private
@@ -58,4 +55,9 @@ class QuestionsController < ApplicationController
   def question_params
     params.require(:question).permit(:title, :body)
   end
+
+  def owner_question
+    redirect_to root_url, notice: 'Access denied' unless @question.user == current_user
+  end
+
 end

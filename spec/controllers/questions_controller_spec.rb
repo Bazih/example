@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
+    let(:questions) { create_list(:question, 2, user: user) }
 
     before { get :index }
 
@@ -18,7 +19,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:answers) { create_list(:answers, 2, question: question) }
+    let(:answers) { create_list(:answers, 2, question: question, user: user) }
 
     before { get :show, id: question }
 
@@ -54,6 +55,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #edit' do
     sign_in_user
+    let(:question) { create(:question, user: @user) }
     before { get :edit, id: question }
 
     it 'assigns the requested question to @question' do
@@ -67,15 +69,22 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #create' do
     sign_in_user
+    let(:question) { create(:question, user: @user) }
 
     context 'when valid attributes' do
+
       it 'saves the new question in the database' do
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        expect { post :create, question: attributes_for(:question) }
+            .to change(Question, :count).by(1)
       end
 
       it 'redirects to show view' do
         post :create, question: attributes_for(:question)
         expect(response).to redirect_to question_path(assigns(:question))
+      end
+
+      it 'add question to user' do
+        expect(question.user_id).to eq @user.id
       end
     end
 
@@ -95,62 +104,88 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'PATCH #update' do
     sign_in_user
 
-    context 'when valid attributes' do
-      it 'assigns the requested question to @question' do
-        patch :update, id: question, question: attributes_for(:question)
-        expect(assigns(:question)).to eq question
+    context 'when owner question' do
+      let(:question) { create(:question, user: @user) }
+      context 'when valid attributes' do
+        before(:each) { |ex| patch :update, id: question, question: attributes_for(:question) unless ex.metadata[:skip] }
+
+        it 'assigns the requested question to @question' do
+          expect(assigns(:question)).to eq question
+        end
+
+        it 'changes question attributes', skip_before: true do
+          patch :update, id: question, question: { title: 'new title', body: 'new body' }
+          question.reload
+          expect(question.title).to eq 'new title'
+          expect(question.body).to eq 'new body'
+        end
+
+        it 'redirects to the updated question' do
+          patch :update, id: question, question: { title: 'new title', body: 'new body' }
+          expect(question).to redirect_to question
+        end
       end
 
-      it 'change question attributes' do
-        patch :update, id: question, question: { title: 'new title', body: 'new body' }
-        question.reload
-        expect(question.title).to eq 'new title'
-        expect(question.body).to eq 'new body'
-      end
+      context 'when invalid attributes' do
+        before { patch :update, id: question, question: { title: 'new_title', body: 'new body' } }
 
-      it 'redirects to the updated question' do
-        patch :update, id: question, question: { title: 'new title', body: 'new body' }
-        expect(question).to redirect_to question
+        it 'does not change question attributes' do
+          question.reload
+          expect(question.title).to eq question.title
+          expect(question.body).to eq 'new body'
+        end
+
+        it 're-render edit view' do
+          expect(response).to redirect_to question_path
+        end
       end
     end
 
-    context 'when invalid attributes' do
-      before { patch :update, id: question, question: { title: 'new title', body: nil } }
-      it 'does not change question attributes' do
+    context 'non-owner question' do
+      let(:owner_user) { create(:user) }
+      let(:question) { create(:question, user: owner_user) }
+      before { patch :update, id: question, question: { title: 'new title', body: 'new body' } }
+
+      it 'does not change question attributes'do
         question.reload
         expect(question.title).to eq question.title
         expect(question.body).to eq 'MyText'
       end
 
-      it 're-render edit view' do
-        expect(response).to render_template :edit
+      it 'redirect to root path' do
+        expect(response).to redirect_to root_path
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    sign_in_user
 
-    context 'by author of question' do
-      let!(:user_question) { create(:question, user: subject.current_user) }
+    context 'owner delete question' do
+      sign_in_user
+      let(:question) { create(:question, user: @user) }
+      before { question }
 
-      it 'deletes question' do
-        expect { delete :destroy, id: user_question }.to change(Question, :count).by(-1)
+      it 'delete question' do
+        expect{ delete :destroy, id: question }.to change(Question, :count).by(-1)
       end
 
-      it 'redirects to index view' do
+      it 'redirect to questions path' do
         delete :destroy, id: question
         expect(response).to redirect_to questions_path
       end
     end
 
-    context 'by non-author' do
-      let(:author) { create(:user) }
-      let!(:another_user_question) { create(:question, user: author) }
+    context 'non-owner delete question' do
+      before { question }
+      sign_in_user
 
       it 'does not delete question' do
-        expect { delete :destroy, id: another_user_question }
-            .to_not change(Question, :count)
+        expect{ delete :destroy, id: question }.to_not change(Question, :count)
+      end
+
+      it 'redirect to root path' do
+        delete :destroy, id: question
+        expect(response).to redirect_to root_path
       end
     end
   end
