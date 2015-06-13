@@ -21,9 +21,9 @@ feature 'Create answer for question', %q{
 
   scenario 'Non-authenticated user ties to create answer' do
     visit question_path(question)
-    fill_in 'Enter your answer:', with: 'Example body text'
-    click_on 'Save answer'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_content 'Create new answer'
+    expect(page).to_not have_content 'Enter your answer'
+    expect(page).to_not have_content 'Save answer'
   end
 end

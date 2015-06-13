@@ -57,7 +57,7 @@ class QuestionsController < ApplicationController
   end
 
   def owner_question
-    redirect_to root_url, notice: 'Access denied' unless @question.user == current_user
+    redirect_to root_url, notice: 'Access denied' unless @question.user_id == current_user.id
   end
 
 end

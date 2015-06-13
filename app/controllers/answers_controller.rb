@@ -51,6 +51,6 @@ class AnswersController < ApplicationController
   end
 
   def owner_answer
-    redirect_to question_path, notice: 'Access denied' unless @answer.user == current_user
+    redirect_to question_path, notice: 'Access denied' unless @answer.user_id == current_user.id
   end
 end

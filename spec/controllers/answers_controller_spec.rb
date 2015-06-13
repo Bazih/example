@@ -11,7 +11,8 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'when valid attributes' do
       it 'saves the new answer in the database' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer) }.to change(question.answers, :count).by(1)
+        expect { post :create, question_id: question, answer: attributes_for(:answer) if subject.current_user }
+            .to change(question.answers, :count).by(1)
       end
 
       it 'redirects to show view' do
@@ -22,7 +23,8 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'when invalid attributes' do
       it 'does not save the answer' do
-        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer) }.to_not change(Answer, :count)
+        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer) }
+            .to_not change(Answer, :count)
       end
 
       it 're-renders new view' do
@@ -104,7 +106,8 @@ RSpec.describe AnswersController, type: :controller do
       before { answer }
 
       it 'deletes answer' do
-        expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, id: answer, question_id: question }
+            .to change(Answer, :count).by(-1)
       end
 
       it 'redirect to question view' do
@@ -114,11 +117,12 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'non-owner delete question' do
-      before { question }
+      before { answer }
       sign_in_user
 
       it 'does not delete question' do
-        expect{ delete :destroy, id: answer, question_id: question }.to change(Answer, :count)
+        expect{ delete :destroy, id: answer, question_id: question }
+            .to_not change(Answer, :count)
       end
 
       it 'redirect to root path' do

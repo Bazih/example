@@ -74,7 +74,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'when valid attributes' do
 
       it 'saves the new question in the database' do
-        expect { post :create, question: attributes_for(:question) }
+        expect { post :create, question: attributes_for(:question) if subject.current_user }
             .to change(Question, :count).by(1)
       end
 
