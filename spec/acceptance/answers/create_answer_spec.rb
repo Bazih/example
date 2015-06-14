@@ -17,6 +17,7 @@ feature 'Create answer for question', %q{
     click_on 'Save answer'
 
     expect(page).to have_content 'Your answer successfully created'
+    expect(page).to have_content 'Example body text'
   end
 
   scenario 'Non-authenticated user ties to create answer' do
