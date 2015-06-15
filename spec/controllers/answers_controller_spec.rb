@@ -8,18 +8,21 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'POST #create' do
     sign_in_user
-    let(:answer) { create(:answer, question: question, user: @user) }
 
     context 'when valid attributes' do
       it 'saves the new answer in the database' do
         expect { post :create, question_id: question, answer: attributes_for(:answer) }
             .to change(question.answers, :count).by(1)
-        expect(answer.user_id).to eq subject.current_user.id
       end
 
       it 'redirects to show view' do
         post :create, question_id: question, answer: attributes_for(:answer)
         expect(response).to redirect_to(assigns(:question))
+      end
+
+      it 'added question belongs authorized user' do
+        post :create, question_id: question, answer: attributes_for(:answer)
+        expect(assigns(:answer).user_id).to eq subject.current_user.id
       end
     end
 
