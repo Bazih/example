@@ -8,8 +8,8 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @answers = @question.answers
-    @answer = Answer.new(:question => @question)
+    @answer = @question.answers.build
+    @answers = Answer.all
   end
 
   def new
@@ -34,8 +34,9 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
-      redirect_to @question
+      redirect_to @question , notice: 'Question successfully updated!'
     else
+      flash.now[:error] = 'Error, check the name or text of the question'
       render :edit
     end
   end

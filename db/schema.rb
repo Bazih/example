@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20150611085414) do
 
   create_table "answers", force: :cascade do |t|
     t.text     "body"
-    t.integer  "question_id"
+    t.integer  "question_id", null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "user_id"

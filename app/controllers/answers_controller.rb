@@ -5,15 +5,13 @@ class AnswersController < ApplicationController
   before_action :owner_answer, except: [:create]
 
    def create
-    @answer = @question.answers.new(answer_params)
+    @question = Question.find(params[:question_id])
+    @answer = @question.answers.create(answer_params)
     @answer.user = current_user
-
     if @answer.save
       flash[:notice_answer] = 'Your answer successfully created'
-      redirect_to @question
     else
       flash[:notice_answer] = 'Your answer no created'
-      redirect_to @question
     end
   end
 
@@ -47,7 +45,7 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :question_id)
+    params.require(:answer).permit(:body)
   end
 
   def owner_answer

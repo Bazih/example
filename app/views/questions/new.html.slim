@@ -2,17 +2,4 @@
   .col-md-8
     h1 Create new question
 
-    -if flash[:error]
-      div.notice = flash[:error]
-
-    =form_for @question do |f|
-     p
-      =f.label :title, 'Title'
-     p
-      =f.text_field :title
-     p
-      =f.label :body, 'Text question'
-     p
-      =f.text_area :body
-
-     p=f.submit 'Create'
+    = render 'form'
