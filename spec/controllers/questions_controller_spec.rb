@@ -122,7 +122,7 @@ RSpec.describe QuestionsController, type: :controller do
 
         it 'redirects to the updated question' do
           patch :update, id: question, question: { title: 'new title', body: 'new body' }
-          expect(question).to redirect_to question
+          expect(response).to redirect_to question_path(assigns(:question))
         end
       end
 
