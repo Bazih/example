@@ -34,5 +34,4 @@ feature 'Deleting your question', %q{
     expect(page).to have_content question.title
     expect(page).to_not have_content 'Delete question'
   end
-
 end
