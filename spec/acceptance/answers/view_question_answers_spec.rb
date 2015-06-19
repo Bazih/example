@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'View all the answers at question', %q{
   View all the answers to the question

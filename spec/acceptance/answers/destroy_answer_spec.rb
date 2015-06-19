@@ -1,4 +1,5 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
+
 
 feature 'Deleting a response by the author', %q{
   In order to be able to remove answers
