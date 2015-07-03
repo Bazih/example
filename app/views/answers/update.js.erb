@@ -1,11 +1,12 @@
 $('.notice').html('');
 $('.answer-errors ul').html('');
-$('#answer_body').val('');
 <% if @answer.errors.present? %>
 	<% @answer.errors.full_messages.each do |message| %>
 		$('.answer-errors ul').append( '<li><%= j message %></li>' );
 	<% end %>
 <% else %>
 	$('.notice').html( '<%= flash[:notice] %>' );
-	$('.answers').append( '<%= j render @answer %>' );
+	$('.answer#answer_<%= @answer.id %>').replaceWith( '<%= j render @answer %>' );
+	$('.edit_answer').hide();
+	$('.edit-button-answer').show();
 <% end %>

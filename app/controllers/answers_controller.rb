@@ -9,9 +9,7 @@ class AnswersController < ApplicationController
     @answer = @question.answers.create(answer_params)
     @answer.user = current_user
     if @answer.save
-      flash[:notice_answer] = 'Your answer successfully created'
-    else
-      flash[:notice_answer] = 'Your answer no created'
+      flash[:notice] = 'Your answer successfully created'
     end
   end
 
@@ -19,18 +17,14 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if @answer.update(answer_params)
-      flash[:notice_answer] = 'Your answer successfully update'
-      redirect_to @answer.question
-    else
-      flash[:notice_answer] = 'Your answer not update'
-      render :edit
-    end
+    @answer.update(answer_params)
+    flash[:notice] = 'Your answer successfully update'
+    #@question = @answer.question
   end
 
   def destroy
     @answer.destroy
-    flash[:notice_answer] = 'Your answer delete'
+    flash[:notice] = 'Your answer delete'
     redirect_to @answer.question
   end
 

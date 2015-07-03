@@ -20,7 +20,16 @@ feature 'Create answer for question', %q{
     expect(page).to have_content 'Example body text'
   end
 
-  scenario 'Non-authenticated user ties to create answer' do
+  scenario 'User try to create invalid answer', js: true do
+    sign_in(user)
+    visit question_path(question)
+
+    click_on 'Save answer'
+
+    expect(page).to have_content "Body can't be blank"
+  end
+
+  scenario 'Non-authenticated user ties to create answer', js: true do
     visit question_path(question)
 
     expect(page).to_not have_content 'Create new answer'
