@@ -107,38 +107,41 @@ RSpec.describe QuestionsController, type: :controller do
     context 'when owner question' do
       let(:question) { create(:question, user: @user) }
       context 'when valid attributes' do
-        before(:each) { |ex| patch :update, id: question, question: attributes_for(:question) unless ex.metadata[:skip] }
+        before(:each) do |ex|
+          patch :update, id: question, question: attributes_for(:question),
+                format: :js unless ex.metadata[:skip]
+        end
 
         it 'assigns the requested question to @question' do
           expect(assigns(:question)).to eq question
         end
 
         it 'changes question attributes', skip_before: true do
-          patch :update, id: question, question: { title: 'new title', body: 'new body' }
+          patch :update, id: question, question: { title: 'new title', body: 'new body' }, format: :js
           question.reload
           expect(question.title).to eq 'new title'
           expect(question.body).to eq 'new body'
         end
 
-        it 'redirects to the updated question' do
-          patch :update, id: question, question: { title: 'new title', body: 'new body' }
-          expect(response).to redirect_to question_path(assigns(:question))
+        it 'render template' do
+          patch :update, id: question, question: { title: 'new title', body: 'new body' }, format: :js
+          expect(response).to render_template :update
         end
       end
 
-      context 'when invalid attributes' do
-        before { patch :update, id: question, question: { title: 'new_title', body: 'new body' } }
-
-        it 'does not change question attributes' do
-          question.reload
-          expect(question.title).to eq question.title
-          expect(question.body).to eq 'new body'
-        end
-
-        it 're-render edit view' do
-          expect(response).to redirect_to question_path
-        end
-      end
+      # context 'when invalid attributes' do
+      #   before { patch :update, id: question, question: { title: 'new_title', body: 'new body' } }
+      #
+      #   it 'does not change question attributes' do
+      #     question.reload
+      #     expect(question.title).to eq question.title
+      #     expect(question.body).to eq 'new body'
+      #   end
+      #
+      #   it 're-render edit view' do
+      #     expect(response).to render_template :edit
+      #   end
+      # end
     end
 
     context 'non-owner question' do

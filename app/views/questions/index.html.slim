@@ -14,10 +14,8 @@ br
       .row
         .col-md-8
           =link_to question.title, question_path(question)
-        .col-lg-2.text-center
-          = link_to 'Update question', edit_question_path(question), class: 'btn btn-sm btn-warning' if current_user && question.user_id == current_user.id
-        .col-lg-1.text-center
-          = link_to 'Delete question', question_path(question), method: :delete, class: 'btn btn-sm btn-warning' if current_user && question.user_id == current_user.id
-.row
-  .col-md-8.text-right
-
+        -if current_user && question.user_id == current_user.id
+          /.col-lg-2.text-center
+          /  = link_to 'Edit', '', class: "question_id_#{question.id} btn btn-sm btn-warning"
+          .col-lg-1.text-center
+            = link_to 'Delete question', question_path(question), method: :delete, class: 'btn btn-sm btn-warning'

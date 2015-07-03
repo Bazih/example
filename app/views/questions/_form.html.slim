@@ -1,14 +1,14 @@
--if flash[:error]
-  div.notice = flash[:error]
+.edit-question
+  .question-errors
+    ul
+  =form_for @question, remote: remote do  |f|
+    p
+      =f.label :title, 'Title'
+    p
+      =f.text_field :title
+    p
+      =f.label :body, 'Text question'
+    p
+      =f.text_area :body
 
-=form_for @question do |f|
-  p
-    =f.label :title, 'Title'
-  p
-    =f.text_field :title
-  p
-    =f.label :body, 'Text question'
-  p
-    =f.text_area :body
-
-  p=f.submit 'Save'
+    p=f.submit 'Save'

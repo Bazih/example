@@ -1,35 +1,44 @@
-h1= @question.title
--if flash[:notice]
-  h3.notice = flash[:notice]
-
-h3= @question.body
-br
-br
+.row
+  .question
+    .container
+      h1= @question.title
+    .container
+      h3= @question.body
+.row
+  .container
+    .notice
+    =render 'form', remote: true
+  .container
+    -if current_user && @question.user_id == current_user.id
+      =link_to 'Edit question', '', class: 'edit-button-question btn btn-sm btn-warning'
+      =link_to 'Delete question', @question, method: :delete, class: 'btn btn-sm btn-warning'
+.row
+  .container
+    .col-md-8 Answers:
+.row
+  .container
+    .col-md-1 Number
+    .col-md-4 Text
+.row.answers
+  = render @question.answers
 
 .row
-  .col-md-8 Answers:
-.answers_notice
-  = render 'notice'
-
-br
-table
-  thead
-    tr
-      td Number
-      td Text
-      td
-      td
-  thead.answers
-      = render @question.answers
+  .container
+    .notice
 
 - if current_user
-  h1 Create new answer
   .row
-    .col-md-8.text-left
-      = form_for [@question, @answer], remote: true do |f|
-        p= f.label :body, 'Enter your answer:'
-        p= f.text_area :body
-        p= f.submit 'Save answer'
+    .container
+      h1 Create new answer
+    .container
+      .col-md-8.text-left
+        = form_for [@question, @answer], remote: true do |f|
+          p= f.label :body, 'Enter your answer:'
+          .answer-errors
+            ul
+          p= f.text_area :body
+          p= f.submit 'Save answer'
 
 .row
-  .col-md-1= link_to 'To questions', questions_path, class: 'btn btn-default'
+  .container
+    .col-md-1= link_to 'To questions', questions_path, class: 'btn btn-default'

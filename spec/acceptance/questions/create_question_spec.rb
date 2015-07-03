@@ -8,7 +8,7 @@ feature 'Create question', %q{
 
   given(:user) { create(:user) }
 
-  scenario 'Authenticated user can create a question' do
+  scenario 'Authenticated user can create a question', js: true do
     sign_in(user)
 
     visit questions_path
@@ -23,7 +23,7 @@ feature 'Create question', %q{
     expect(current_path).to eq question_path(Question.last)
   end
 
-  scenario 'Non-authenticated user ties to create question' do
+  scenario 'Non-authenticated user ties to create question', js: true do
     visit questions_path
     click_on 'Create question'
 

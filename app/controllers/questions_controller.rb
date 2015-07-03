@@ -33,12 +33,8 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question , notice: 'Question successfully updated!'
-    else
-      flash.now[:error] = 'Error, check the name or text of the question'
-      render :edit
-    end
+    @question.update(question_params)
+    flash[:notice] = 'Question successfully updated!'
   end
 
   def destroy
