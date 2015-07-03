@@ -11,4 +11,4 @@
         p=f.submit 'Save'
     .col-md-1= link_to 'Edit answer', '', class: 'edit-button-answer btn btn-xs btn-warning',
                        data: { answer_id: answer.id }
-    .col-md-1= link_to 'Delete answer', answer, method: :delete, class: 'btn btn-xs btn-warning'
+    .col-md-1= link_to 'Delete answer', answer, method: :delete, class: 'btn btn-xs btn-warning', remote: true

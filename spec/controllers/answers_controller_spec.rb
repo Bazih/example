@@ -112,13 +112,13 @@ RSpec.describe AnswersController, type: :controller do
       before { answer }
 
       it 'deletes answer' do
-        expect { delete :destroy, id: answer, question_id: question }
+        expect { delete :destroy, id: answer, question_id: question, format: :js }
             .to change(Answer, :count).by(-1)
       end
 
-      it 'redirect to question view' do
-        delete :destroy, id: answer
-        expect(response).to redirect_to question
+      it 'render template' do
+        delete :destroy, id: answer, format: :js
+        expect(answer).to render_template :destroy
       end
     end
 
@@ -127,12 +127,12 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user
 
       it 'does not delete question' do
-        expect{ delete :destroy, id: answer, question_id: question }
+        expect{ delete :destroy, id: answer, question_id: question, format: :js }
             .to_not change(Answer, :count)
       end
 
       it 'redirect to root path' do
-        delete :destroy, id: answer
+        delete :destroy, id: answer, format: :js
         expect(response).to redirect_to question_path
       end
     end

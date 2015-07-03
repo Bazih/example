@@ -12,7 +12,7 @@ feature 'Deleting a response by the author', %q{
   given!(:answer){ create(:answer, question: question, user: author) }
   given(:non_author) { create(:user) }
 
-  scenario 'The authenticated user removes your answer' do
+  scenario 'The authenticated user removes your answer', js: true do
     sign_in(author)
 
     visit questions_path

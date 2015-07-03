@@ -25,7 +25,6 @@ class AnswersController < ApplicationController
   def destroy
     @answer.destroy
     flash[:notice] = 'Your answer delete'
-    redirect_to @answer.question
   end
 
   private
