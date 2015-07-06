@@ -5,7 +5,7 @@ $('.answer-errors ul').html('');
 		$('.answer-errors ul').append( '<li><%= j message %></li>' );
 	<% end %>
 <% else %>
-	$('.notice').html( '<%= flash[:notice] %>' );
+	$('.notice').html( '<%= j flash[:notice] %>' );
 	$('.answer#answer_<%= @answer.id %>').replaceWith( '<%= j render @answer %>' );
 	$('.edit_answer').hide();
 	$('.edit-button-answer').show();

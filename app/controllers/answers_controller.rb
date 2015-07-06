@@ -1,16 +1,22 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, except: [:edit, :update, :destroy]
+  before_action :load_question, except: [:edit, :best, :update, :destroy]
   before_action :load_answer, except: [:create]
   before_action :owner_answer, except: [:create]
 
-   def create
+  def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.create(answer_params)
     @answer.user = current_user
     if @answer.save
       flash[:notice] = 'Your answer successfully created'
     end
+  end
+
+  def best
+    @best = @answer.question.answers.find_by(best: true)
+    @answer.make_the_best if @answer.user_id == current_user.id
+    @best.reload if @best
   end
 
   def edit
