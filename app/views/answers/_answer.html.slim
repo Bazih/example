@@ -1,6 +1,10 @@
+-answer.persisted?
 .answer.container id = "answer_#{answer.id}"
   .col-md-1= answer.id
   .col-md-4= answer.body
+  -if current_user && answer.question.user_id == current_user.id
+    .col-md-1=answer.best ?  'Best' : link_to("Best answer", best_answer_path(answer.id), method: :post, remote: true,
+                                              class: 'btn btn-xs btn-success')
   -if current_user && answer.user_id == current_user.id
     .col-md-3
       =form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|

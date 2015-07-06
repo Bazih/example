@@ -6,6 +6,6 @@ $('#answer_body').val('');
 		$('.answer-errors ul').append( '<li><%= j message %></li>' );
 	<% end %>
 <% else %>
-	$('.notice').html( '<%= flash[:notice] %>' );
+	$('.notice').html( '<%= j flash[:notice] %>' );
 	$('.answers').append( '<%= j render @answer %>' );
 <% end %>

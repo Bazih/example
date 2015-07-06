@@ -1,0 +1,5 @@
+$("#answer_<%= @answer.id %>").remove();
+$('.answers').prepend('<%= j render @answer %>');
+<% if @best %>
+	$("#answer_<%= @best.id %>").replaceWith('<%= j render @best%>');
+<% end %>
