@@ -15,14 +15,17 @@ RSpec.describe Answer, type: :model do
     let(:answer) { create(:answer, question: question, user: user) }
 
     it 'should make the answer the best' do
-      answer.make_the_best
+      question.answers.update_all(best: false)
+      answer.update!(best: true)
       expect(answer.best).to eq true
     end
 
     it 'should to make the rest of the answers are not the best' do
-      answer.make_the_best
+      question.answers.update_all(best: false)
+      answer.update!(best: true)
       other_answer = create(:answer, question: question, user: user)
-      other_answer.make_the_best
+      question.answers.update_all(best: false)
+      other_answer.update!(best: true)
       answer.reload
       other_answer.reload
 

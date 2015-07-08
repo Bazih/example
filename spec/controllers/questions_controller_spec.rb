@@ -27,10 +27,6 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
-    it 'when assigns a new Answer to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
     it 'when there are answers to questions' do
       expect(assigns(:answers)).to match_array(question.answers)
     end

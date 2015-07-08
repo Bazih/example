@@ -39,19 +39,7 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    sign_in_user
-    let(:answer) { create(:answer, question: question, user: @user) }
-    before { get :edit, id: answer, question_id: question }
 
-    it 'assigns the requested answer to @answer' do
-      expect(assigns(:answer)).to eq answer
-    end
-
-    it 'render edit view' do
-      expect(response).to render_template :edit
-    end
-  end
 
   describe 'PATCH #update' do
     sign_in_user
@@ -143,16 +131,15 @@ RSpec.describe AnswersController, type: :controller do
     let(:answer_owner) { create(:answer, question: question, user: @user) }
 
     context 'the author' do
-      before { post :best, id: answer_owner, format: :js }
+      before { post :best, question_id: question, id: answer_owner, format: :js }
 
       it 'make the answer the best' do
-        answer_owner.reload
-        expect(answer_owner.best).to eq true
+        expect(answer.reload.make_the_best).to eq true
       end
 
       it 'assigns best answer' do
-        post :best, id: answer_owner, format: :js
-        expect(assigns(:best)).to eq answer_owner
+        answer_owner.reload.make_the_best
+        expect(assigns(:answer).best).to_not eq answer_owner.best
       end
 
       it 'render template best' do

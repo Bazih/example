@@ -32,7 +32,7 @@
       h1 Create new answer
     .container
       .col-md-8.text-left
-        = form_for [@question, @answer], remote: true do |f|
+        = form_for [@question, Answer.new], remote: true do |f|
           p= f.label :body, 'Enter your answer:'
           .answer-errors
             ul
