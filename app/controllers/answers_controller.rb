@@ -14,7 +14,7 @@ class AnswersController < ApplicationController
 
   def best
     @best = @answer.question.best_answer
-    @answer.make_the_best if @answer.question.user_id == current_user.id && current_user
+    @answer.make_the_best if @answer.question.user_id == current_user.id
     @best.reload if @best
   end
 
