@@ -11,18 +11,14 @@ RSpec.describe Question, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
   it { should belong_to(:user) }
 
-  describe '#<best_answer>' do
+  describe '#best_answer' do
     let(:user) { create(:user) }
     let!(:question) { create(:question, user: user) }
-    let!(:answers) { create_list(:answer, 5, question: question, user: user) }
     let!(:answer) { create(:answer, question: question, user: user) }
+    let!(:best_answer) { create(:best_answer, question: question, user: user) }
 
     it 'should find the best answer' do
-      question.answers.update_all(best: false)
-
-      answer.update(best: true)
-
-      expect(question.best_answer).to eq answer
+      expect(question.best_answer).to eq best_answer
     end
   end
 

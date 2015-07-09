@@ -9,7 +9,7 @@ RSpec.describe Answer, type: :model do
   it { should belong_to(:question) }
   it { should belong_to(:user) }
 
-  describe '#<make_the_best>' do
+  describe '#make_the_best' do
     let(:user) { create(:user) }
     let!(:question) { create(:question, user: user) }
     let(:answer) { create(:answer, question: question, user: user) }
@@ -24,7 +24,6 @@ RSpec.describe Answer, type: :model do
 
     it 'should to make the rest of the answers are not the best' do
       other_answer = create(:answer, question: question, user: user)
-      question.answers.update_all(best: false)
       question.answers.update_all(best: false)
 
       answer.make_the_best
