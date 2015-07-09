@@ -19,6 +19,6 @@ feature 'Add files to question', %q{
     attach_file 'File', "#{Rails.root}/public/robots.txt"
     click_on 'Save'
 
-    expect(page).to  have_content 'robots.txt'
+    expect(page).to  have_link 'robots.txt', href: '/uploads/attachment/file/1/robots.txt'
   end
 end

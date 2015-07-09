@@ -7,11 +7,18 @@ html
     = csrf_meta_tags
   body
     .row
-      .col-lg-12.text-right
-        = link_to 'Sign up', new_user_registration_path, class: 'btn btn-sm btn-success'
-        = link_to 'Sign in', new_user_session_path, class: 'btn btn-sm btn-success'
-        = link_to 'Signed out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-warning'
-    p.notice= notice
-    p.alert= alert
+      .container
+        .col-lg-12.text-right
+          = link_to 'Sign up', new_user_registration_path, class: 'btn btn-sm btn-success'
+          = link_to 'Sign in', new_user_session_path, class: 'btn btn-sm btn-success'
+          = link_to 'Signed out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-warning'
+    .row
+      .container
+        .col-md-8
+          p.notice= notice
+          p.alert= alert
     = yield
-  /footer.panel-footer
+  footer.panel-footer
+    .row
+      .container.text-center
+        p © 2015, Exmaple

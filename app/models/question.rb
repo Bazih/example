@@ -8,6 +8,8 @@ class Question < ActiveRecord::Base
   validates :body, length: { minimum: 5, maximum: 400 }
   validates :title, uniqueness: true
 
+  accepts_nested_attributes_for :attachments
+
   def best_answer
     answers.where(best: true).take
   end

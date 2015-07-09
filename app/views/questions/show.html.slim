@@ -4,6 +4,11 @@
       h1= @question.title
     .container
       h3= @question.body
+    .container
+      h4 Attachments:
+      ul
+        - @question.attachments.each do |a|
+          li= link_to a.file.identifier, a.file.url
 .row
   .container
     .notice
@@ -14,7 +19,8 @@
       =link_to 'Delete question', @question, method: :delete, class: 'btn btn-sm btn-warning'
 .row
   .container
-    .col-md-8 Answers:
+    .col-md-8
+      h2 Answers:
 .row
   .container
     .col-md-1 Number
@@ -29,7 +35,7 @@
 - if current_user
   .row
     .container
-      h1 Create new answer
+      h3 Create new answer
     .container
       .col-md-8.text-left
         = form_for [@question, Answer.new], remote: true do |f|
