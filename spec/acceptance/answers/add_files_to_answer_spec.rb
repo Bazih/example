@@ -1,0 +1,26 @@
+require_relative '../acceptance_helper'
+
+feature 'Add files to answer', %q{
+  In order to illustrate my answer
+  As an answer's author
+  I'd like to be able to attach files
+} do
+
+  given(:user) { create(:user) }
+  given(:user) { create(:question, user: user) }
+
+  background do
+    sign_in(user)
+    visit question_path(question)
+  end
+
+  scenario 'User adds file when asks answer', js: true do
+    fill_in 'Enter your answer:', with: 'New answer'
+    attach_file 'File', "#{Rails.root}/public/robots.txt"
+    click_on 'Save'
+
+    withiz '.answers' do
+      expect(page).to  have_link 'robots.txt', href: '/uploads/attachment/file/1/robots.txt'
+    end
+  end
+end

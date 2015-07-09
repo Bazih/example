@@ -14,3 +14,10 @@
 
 config/database.yml
 .idea
+
+public/uploads
+public/system
+public/tmp
+public/spec
+
+.DS_Store
