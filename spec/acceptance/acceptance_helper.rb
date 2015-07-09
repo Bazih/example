@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.configure do |config|
+  Capybara.default_wait_time = 5
   Capybara.javascript_driver = :webkit
 
   config.include AcceptanceMacros, type: :feature

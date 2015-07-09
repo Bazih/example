@@ -10,6 +10,7 @@ RSpec.describe Question, type: :model do
 
   it { should have_many(:answers).dependent(:destroy) }
   it { should belong_to(:user) }
+  it { should have_many(:attachments) }
 
   describe '#best_answer' do
     let(:user) { create(:user) }
@@ -21,6 +22,4 @@ RSpec.describe Question, type: :model do
       expect(question.best_answer).to eq best_answer
     end
   end
-
-
 end

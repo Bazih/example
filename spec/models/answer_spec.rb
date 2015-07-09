@@ -35,6 +35,4 @@ RSpec.describe Answer, type: :model do
       expect(answer.best).to eq false
     end
   end
-
-
 end
