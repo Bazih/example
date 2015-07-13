@@ -11,10 +11,9 @@
     p
       = f.text_area :body
     p Attachmetns:
-    p
-      = f.fields_for :attachments do |a|
-        p
-          = a.label :file
-        p
-          = a.file_field :file
+
+    = f.fields_for :attachments do |attachment|
+      = render 'attachment_fields', :f => attachment
+      .links
+        = link_to_add_association 'add attachment', f, :attachments
     p=f.submit 'Save'

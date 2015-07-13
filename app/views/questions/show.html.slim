@@ -1,14 +1,16 @@
-.row
-  .question
-    .container
-      h1= @question.title
-    .container
-      h3= @question.body
-    .container
-      h4 Attachments:
-      ul
-        - @question.attachments.each do |a|
-          li= link_to a.file.identifier, a.file.url
+.row.question
+  .container
+    h1= @question.title
+  .container
+    h3= @question.body
+  .container
+    h4 Attachments:
+    ul
+      - @question.attachments.each do |a|
+        li class="attach-id-#{a.id}"
+          = link_to a.file.identifier, a.file.url
+          - if current_user && @question.user_id == current_user.id
+            .btn.btn-xs.btn-danger= link_to 'Delete file', attachment_path(a), method: :delete, remote: true, class: '.btn-link'
 .row
   .container
     .notice
@@ -23,8 +25,8 @@
       h2 Answers:
 .row
   .container
-    .col-md-1 Number
-    .col-md-4 Text
+    .col-md-1.text-center Number
+    .col-md-4.text-center Text
 .row.answers
   = render @question.answers
 
@@ -33,16 +35,21 @@
     .notice
 
 - if current_user
-  .row
+  .row.new_answer
     .container
       h3 Create new answer
     .container
       .col-md-8.text-left
-        = form_for [@question, Answer.new], remote: true do |f|
+        = form_for [@question, @answer], remote: true, method: :post do |f|
           p= f.label :body, 'Enter your answer:'
           .answer-errors
             ul
           p= f.text_area :body
+          p Attachment:
+          = f.fields_for :attachments do |attachment|
+            = render 'answers/attachment_fields_a', :f => attachment
+            .links
+              = link_to_add_association 'add attachment', f, :attachments
           p= f.submit 'Save answer'
 
 .row

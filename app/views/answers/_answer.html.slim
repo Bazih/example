@@ -1,18 +1,31 @@
--answer.persisted?
-.answer.container id = "answer_#{answer.id}"
-  .col-md-1= answer.id
-  .col-md-4= answer.body
-  -if current_user && answer.question.user_id == current_user.id
-    .col-md-1=answer.best ?  'Best' : link_to("Best answer", best_answer_path(answer.id), method: :post, remote: true,
-                                              class: 'btn btn-xs btn-success')
-  -if current_user && answer.user_id == current_user.id
-    .col-md-3
-      =form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-        p=f.label :body, 'Text answer'
-        .answer-errors
+- if answer.persisted?
+  .answer.container id = "answer_#{answer.id}"
+    .col-xs-1.text-center= answer.id
+    .col-xs-3.text-center= answer.body
+    .col-xs-2.text-center
+      .container
+        .col-xs-1.text-center
+          p Attachments:
+      .container
+        .col-xs-1.text-center
           ul
-        p=f.text_area :body
-        p=f.submit 'Save'
-    .col-md-1= link_to 'Edit answer', '', class: 'edit-button-answer btn btn-xs btn-warning',
-                       data: { answer_id: answer.id }
-    .col-md-1= link_to 'Delete answer', answer, method: :delete, class: 'btn btn-xs btn-warning', remote: true
+            - answer.attachments.each do |a|
+              li class="attach-id-answer-#{a.id}"
+                = link_to a.file.identifier, a.file.url
+                - if current_user && @question.user_id == current_user.id
+                  .btn.btn-xs.btn-danger= link_to 'Delete file', attachment_path(a), method: :delete, remote: true, class: '.btn-link'
+
+    -if current_user && answer.question.user_id == current_user.id
+      .col-xs-1.text-center=answer.best ?  'Best' : link_to('Best answer', best_answer_path(answer.id), method: :post, remote: true,
+                                                class: 'btn btn-xs btn-success')
+    -if current_user && answer.user_id == current_user.id
+      .col-xs-3.text-center
+        =form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+          p=f.label :body, 'Text answer'
+          .answer-errors
+            ul
+          p=f.text_area :body
+          p=f.submit 'Save'
+      .col-xs-1.text-center= link_to 'Edit answer', '', class: 'edit-button-answer btn btn-xs btn-warning',
+                         data: { answer_id: answer.id }
+      .col-xs-1.text-center= link_to 'Delete answer', answer, method: :delete, class: 'btn btn-xs btn-warning', remote: true

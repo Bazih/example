@@ -27,8 +27,8 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
-    it 'when there are answers to questions' do
-      expect(assigns(:answers)).to match_array(question.answers)
+    it 'build new attachment for answer' do
+      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
     end
 
     it 'renders show view' do
