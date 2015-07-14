@@ -10,18 +10,8 @@ feature 'Add files to answer', %q{
   given(:question) { create(:question, user: user) }
 
   background do
-
     sign_in(user)
     visit question_path(question)
-  end
-
-  scenario 'User add file when add answer', js: true do
-
-    fill_in 'Enter your answer:', with: 'New answer'
-    attach_file 'File', "#{Rails.root}/public/robots.txt"
-    click_on 'Save'
-
-    expect(page).to have_content 'robots.txt'
   end
 
   scenario 'User adds several files when ask answer', js: true do

@@ -12,7 +12,7 @@
             - answer.attachments.each do |a|
               li class="attach-id-answer-#{a.id}"
                 = link_to a.file.identifier, a.file.url
-                - if current_user && @question.user_id == current_user.id
+                - if current_user && answer.user_id == current_user.id
                   .btn.btn-xs.btn-danger= link_to 'Delete file', attachment_path(a), method: :delete, remote: true, class: '.btn-link'
 
     -if current_user && answer.question.user_id == current_user.id
