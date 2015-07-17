@@ -1,12 +1,13 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
-ready = ->
-  $(document).on 'click', '.edit-button-question', (e) ->
-    e.preventDefault()
-    $(this).hide()
-    $('form.edit_question').show()
+$ ->
+  ready_question = ->
+    $(document).on 'click', '.edit-button-question', (e) ->
+      e.preventDefault()
+      $(this).hide()
+      $('form.edit_question').show()
 
-$(document).ready ready
-$(document).on 'page:load', ready
-$(document).on('page:update', ready)
+  $(document).ready ready_question
+  $(document).on('page:load', ready_question)
+  $(document).on('page:update', ready_question)

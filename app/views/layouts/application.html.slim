@@ -14,7 +14,7 @@ html
           = link_to 'Signed out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-warning'
     .row
       .container
-        .col-md-8
+        .col-md-8.error-messages.block
           p.notice= notice
           p.alert= alert
     = yield

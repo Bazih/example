@@ -2,18 +2,13 @@
   .question-errors
     ul
   = form_for @question, remote: remote do  |f|
-    p
-      = f.label :title, 'Title'
-    p
-      = f.text_field :title
-    p
-      = f.label :body, 'Text question'
-    p
-      = f.text_area :body
+    p= f.label :title, 'Title'
+    p= f.text_field :title
+    p= f.label :body, 'Text question'
+    p= f.text_area :body
     p Attachmetns:
-
-    = f.fields_for :attachments do |attachment|
-      = render 'attachment_fields', :f => attachment
+    = f.fields_for :attachments, remote: remote do |attachment|
       .links
         = link_to_add_association 'add attachment', f, :attachments
+      = render 'attachment_fields', :f => attachment
     p=f.submit 'Save'

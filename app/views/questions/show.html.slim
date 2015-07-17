@@ -4,13 +4,8 @@
   .container
     h3= @question.body
   .container
-    h4 Attachments:
-    ul
-      - @question.attachments.each do |a|
-        li class="attach-id-#{a.id}"
-          = link_to a.file.identifier, a.file.url
-          - if current_user && @question.user_id == current_user.id
-            .btn.btn-xs.btn-danger= link_to 'Delete file', attachment_path(a), method: :delete, remote: true, class: '.btn-link'
+    = render 'attache'
+
 .row
   .container
     .notice
@@ -43,7 +38,7 @@
         = form_for [@question, @answer], remote: true, method: :post do |f|
           p= f.label :body, 'Enter your answer:'
           .answer-errors
-            ul
+            ul.error-messages.block
           p= f.text_area :body
           p Attachment:
           = f.fields_for :attachments do |attachment|

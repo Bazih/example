@@ -7,8 +7,8 @@
 	<% flash[:notice] = '' %>
 <% end %>
 
-<% if @result.class.name == 'Question' %>
-	$('.attach-id-<%= @attach.id %>').remove();
+<% if @attachment.attachmentable_type == 'Question' %>
+	$('li.attach-id-<%= @attachment.id %>').remove();
 <% else %>
-	$('.attach-id-answer-<%= @attach.id %>').remove();
+	$('li.attach-id-answer-<%= @attachment.id %>').remove();
 <% end %>
