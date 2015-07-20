@@ -1,6 +1,7 @@
 .row.question
   .container
     h1= @question.title
+    = render 'layouts/rating', votable: @question, vote: @question.user_vote(current_user)
   .container
     h3= @question.body
   .container

@@ -1,5 +1,6 @@
 class Answer < ActiveRecord::Base
   include Attachmentable
+  include Votable
 
   default_scope { order('best DESC') }
 

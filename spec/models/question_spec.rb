@@ -12,6 +12,9 @@ RSpec.describe Question, type: :model do
   it { should belong_to(:user) }
 
   it_should_behave_like 'attachmentable'
+  let(:user) { create(:user) }
+  let(:votable) { create(described_class.to_s.underscore.to_sym, user: user) }
+  it_behaves_like 'votable'
 
   describe '#best_answer' do
     let(:user) { create(:user) }
