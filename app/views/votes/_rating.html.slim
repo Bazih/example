@@ -1,17 +1,19 @@
 .rating.row
   b class="col-sm-1" id="rating-value-#{votable.id}" Rating: #{votable.rating}
   - if user_signed_in? && current_user.id != votable.user_id
-    = link_to polymorphic_path(votable, action: 'vote_up'),
-              method: :patch, remote: true, data: { type: :json },
-              class: 'vote-link col-sm-1', id: "vote_up_#{votable.id}"
-      i.glyphicon.glyphicon-plus  Up
 
-    = link_to polymorphic_path(votable, action: 'vote_down'),
-              method: :patch, remote: true, data: { type: :json },
-              class: 'vote-link col-sm-1', id: "vote_down_#{votable.id}"
-      i.glyphicon.glyphicon-minus  Down
+    .up_down id= 'vote_up_down_#{votable.id}' style=('display:none' if votable.voted_by?(current_user))
+      = link_to polymorphic_path(votable, action: 'vote_up'),
+                method: :patch, remote: true, data: { type: :json },
+                class: 'vote-link col-sm-1'
+        i.glyphicon.glyphicon-plus  Up
 
-    i.vote-cancel id="vote_cancel_#{votable.id}" style=('display:none' if vote.nil?)
+      = link_to polymorphic_path(votable, action: 'vote_down'),
+                method: :patch, remote: true, data: { type: :json },
+                class: 'vote-link col-sm-1'
+        i.glyphicon.glyphicon-minus  Down
+
+    i.vote-cancel id="vote_cancel_#{votable.id}" style=('display:none' unless votable.voted_by?(current_user))
       | Voted #{vote.present? && vote.value == 1 ? 'up' : 'down'}
       = link_to '(Cancel)', polymorphic_path(votable, action: 'vote_cancel'),
-                method: :patch, remote: true, data: { type: :json }
+                method: :delete, remote: true, data: { type: :json }

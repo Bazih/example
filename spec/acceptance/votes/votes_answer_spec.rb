@@ -86,6 +86,7 @@ feature 'Vote for answers', %q{
       within "#answer-#{answer_with_vote.id}" do
         expect(page).to have_content 'Rating: 1'
 
+        click_on 'Cancel'
         click_on 'Down'
         expect(page).to have_content 'Rating: -1'
         expect(page).to have_link 'Cancel'
