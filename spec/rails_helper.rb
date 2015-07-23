@@ -21,6 +21,8 @@ require 'rspec/rails'
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 Dir[Rails.root.join('spec/models/shared_examples/**/*.rb')].each { |f| require f }
 Dir[Rails.root.join('spec/controllers/shared_examples/**/*.rb')].each { |f| require f }
+Capybara.server_port = 3100
+Capybara.server_host = '0.0.0.0'
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.

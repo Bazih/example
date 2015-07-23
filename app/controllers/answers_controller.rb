@@ -1,9 +1,10 @@
 class AnswersController < ApplicationController
-  include AuthUser
+  include Voting
 
-  before_action :load_question, except: [:edit, :best, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :load_question, only: [:create]#except: [:edit, :best, :update, :destroy, :vote_up, :vote_down, :vote_cancel]
   before_action :load_answer, except: [:create]
-  before_action :owner_answer, except: [:create, :best]
+  before_action :owner_answer, except: [:create, :best, :vote_up, :vote_down, :vote_cancel]
 
   def create
     @answer = @question.answers.create(answer_params)
@@ -32,6 +33,7 @@ class AnswersController < ApplicationController
   private
 
   def load_question
+    #binding.pry
     @question = Question.find(params[:question_id])
   end
 

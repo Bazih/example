@@ -7,9 +7,8 @@ feature 'Vote for questions', %q{
 } do
 
   given(:user) { create(:user) }
+  given(:no_author) { create(:user) }
   given(:question) { create(:question, user: user) }
-
-  #given(:current_user_question) { create(:question, user: user) }
 
   scenario 'Non-authenticated user tries to vote for question' do
     visit question_path(question)
@@ -20,7 +19,7 @@ feature 'Vote for questions', %q{
 
   describe 'Authenticated user' do
     background do
-      sign_in(user)
+      sign_in(no_author)
       visit question_path(question)
     end
 
@@ -49,7 +48,7 @@ feature 'Vote for questions', %q{
         click_on 'Up'
 
         expect(page).to_not have_link('Up')
-        expect(page).to have_content('Voted up')
+        expect(page).to have_link('Cancel')
       end
     end
 
@@ -58,17 +57,17 @@ feature 'Vote for questions', %q{
         click_on 'Down'
 
         expect(page).to_not have_link('Down')
-        expect(page).to have_content('Voted down')
+        expect(page).to have_content('Cancel')
       end
     end
   end
 
   describe 'User-voter' do
-    given(:question_with_vote) { create(:question) }
-    given!(:vote_up) { create(:vote_up, votable: question_with_vote, user: user) }
+    given(:question_with_vote) { create(:question, user: user) }
+    given!(:vote_up) { create(:vote_up, votable: question_with_vote, user: no_author) }
 
     background do
-      sign_in(user)
+      sign_in(no_author)
       visit question_path(question_with_vote)
     end
 
@@ -84,7 +83,7 @@ feature 'Vote for questions', %q{
 
         click_on 'Down'
         expect(page).to have_content 'Rating: -1'
-        expect(page).to have_link 'Up'
+        expect(page).to have_link 'Cancel'
         expect(page).to_not have_link 'Down'
       end
     end
@@ -105,12 +104,11 @@ feature 'Vote for questions', %q{
 
   scenario 'Author of question tries to vote for it' do
     sign_in(user)
-    visit question_path(current_user_question)
+    visit question_path(question)
 
     within '.question' do
       expect(page).to_not have_link('Up')
       expect(page).to_not have_link('Down')
     end
   end
-
 end

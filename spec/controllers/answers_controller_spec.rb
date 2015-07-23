@@ -155,4 +155,11 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  let(:votable_name) { described_class.controller_name.singularize.underscore.to_sym }
+  let(:votable) { create(votable_name, question: question, user: user) }
+  let(:current_user_votable) { create(votable_name, question: question, user: @user) }
+  let(:votable_with_vote) { create(votable_name, question: question, user: user) }
+
+  it_behaves_like 'voting'
 end

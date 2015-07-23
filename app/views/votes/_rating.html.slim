@@ -1,17 +1,17 @@
 .rating.row
-  b.col-sm-2.rating-value Rating: #{votable.rating}
-  - if user_signed_in? #&& !belongs_to_current_user?(votable)
+  b class="col-sm-1" id="rating-value-#{votable.id}" Rating: #{votable.rating}
+  - if user_signed_in? && current_user.id != votable.user_id
     = link_to polymorphic_path(votable, action: 'vote_up'),
               method: :patch, remote: true, data: { type: :json },
-              class: 'vote-link vote-up col-sm-1'
-      i.glyphicon.glyphicon-plus Up
+              class: 'vote-link col-sm-1', id: "vote_up_#{votable.id}"
+      i.glyphicon.glyphicon-plus  Up
 
     = link_to polymorphic_path(votable, action: 'vote_down'),
               method: :patch, remote: true, data: { type: :json },
-              class: 'vote-link vote-down col-sm-1'
-      i.glyphicon.glyphicon-minus Down
+              class: 'vote-link col-sm-1', id: "vote_down_#{votable.id}"
+      i.glyphicon.glyphicon-minus  Down
 
-    i.vote-cancel style=('display:none' if vote.nil?)
+    i.vote-cancel id="vote_cancel_#{votable.id}" style=('display:none' if vote.nil?)
       | Voted #{vote.present? && vote.value == 1 ? 'up' : 'down'}
       = link_to '(Cancel)', polymorphic_path(votable, action: 'vote_cancel'),
                 method: :patch, remote: true, data: { type: :json }
