@@ -16,6 +16,13 @@ gem 'carrierwave'
 gem 'cocoon'
 gem 'remotipart'
 gem 'handlebars_assets'
+gem 'private_pub'
+gem 'thin'
+
+group :development do
+  gem 'meta_request'
+  gem 'foreman', require: false
+end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
