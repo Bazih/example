@@ -119,6 +119,11 @@ GEM
     git-version-bump (0.15.1)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
+    gon (5.2.3)
+      actionpack (>= 2.3.0)
+      json
+      multi_json
+      request_store (>= 1.0.5)
     handlebars_assets (0.20.2)
       execjs (~> 2.0)
       multi_json (~> 1.0)
@@ -195,6 +200,7 @@ GEM
     rdoc (4.2.0)
       json (~> 1.4)
     remotipart (1.2.1)
+    request_store (1.2.0)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
     rspec-core (3.2.3)
@@ -288,6 +294,7 @@ DEPENDENCIES
   devise
   factory_girl_rails
   foreman
+  gon
   handlebars_assets
   jbuilder (~> 2.0)
   jquery-rails

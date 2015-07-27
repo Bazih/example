@@ -1,0 +1,69 @@
+<div class="answer container" id="answer_{{id}}">
+  <hr>
+		<div class="container rating" id="answer-{{id}}">
+			<div class="answer">
+				<div class="row">
+					<b class="col-sm-1" id="rating-value-{{id}}">Rating: {{rating}} </b>
+						{{#unless isAnswerAuthor}}
+							<a data-type="json" class="vote-link col-sm-1" id="vote_up_{{id}}" style="display: block;" data-remote="true" rel="nofollow" data-method="patch" href="/answers/{{id}}/vote_up">
+								<i class="glyphicon glyphicon-plus"> Up</i></a>
+							<a data-type="json" class="vote-link col-sm-1" id="vote_down_{{id}}" style="display: block;" data-remote="true" rel="nofollow" data-method="patch" href="/answers/{{id}}/vote_down">
+								<i class="glyphicon glyphicon-minus"> Down</i></a>
+
+							<i class="vote-cancel" id="vote_cancel_{{id}}" style="display:none">Voted
+								<a data-type="json" data-remote="true" rel="nofollow" data-method="delete" href="/answers/{{id}}/vote_cancel">(Cancel)</a>
+							</i>
+						{{/unless}}
+				</div>
+			</div>
+		</div>
+		<div class="container update">
+			<div class="col-xs-1 text-center">{{id}}</div>
+			<div class="col-xs-3 text-center">{{body}}</div>
+				{{#if isQuestionAuthor}}
+        	<div class="col-xs-1 text-center text-success">
+          	<a class="btn btn-xs btn-success" data-remote="true" rel="nofollow" data-method="post" href="/answers/{{id}}/best">Best answer</a>
+					</div>
+				{{/if}}
+				{{#if isAnswerAuthor}}
+					<div class="col-xs-3 text-center">
+						<form id="edit-answer-{{id}}" class="edit_answer" action="/answers/{{id}}" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="_method" value="patch">
+							<p>
+								<label for="answer_body">Text answer</label>
+							</p>
+							<div class="answer-errors">
+								<ul></ul>
+							</div>
+							<p><textarea name="answer[body]" id="answer_body">{{body}}</textarea>
+							</p>
+							<p>
+								<input type="submit" name="commit" value="Save">
+							</p></form>
+					</div>
+					<div class="col-xs-1 text-center">
+						<a class="edit-button-answer btn btn-xs btn-warning" data-answer-id="{{id}}" href="">Edit answer</a>
+					</div>
+					<div class="col-xs-1 text-center">
+						<a class="btn btn-xs btn-warning" data-remote="true" rel="nofollow" data-method="delete" href="/answers/{{id}}">Delete answer</a>
+					</div>
+				{{/if}}
+			</div>
+		{{#if attachments}}
+			<div class="container attache">
+				<p>Attachments:</p>
+					<ul>
+						{{#each attachments}}
+							<li id="attach-{{this.id}}">
+								<a href="{{this.file.url}}">{{this.name}}</a>
+								{{#if ../isAnswerAuthor}}
+                  <div class="btn btn-xs btn-danger">
+                    <a id="delete-attach-{{this.id}}" class="delete-attach-link" data-remote="true" rel="nofollow" data-method="delete" href="/uploads/attachments/file/{{this.id}}/{{this.name}}">Delete file</a>
+                  </div>
+								{{/if}}
+							</li>
+						{{/each}}
+					</ul>
+			</div>
+		{{/if}}
+  </hr>
+</div>

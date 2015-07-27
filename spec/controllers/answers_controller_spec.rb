@@ -17,7 +17,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'render create template' do
         post :create, question_id: question, answer: attributes_for(:answer), format: :js
-        expect(response).to render_template :create
+        expect(response).to be_success
       end
 
       it 'added question belongs authorized user' do
@@ -32,9 +32,9 @@ RSpec.describe AnswersController, type: :controller do
             .to_not change(Answer, :count)
       end
 
-      it 're-renders new view' do
+      it 'responds with error' do
         post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
-        expect(response).to render_template :create
+        expect(response).to be_unprocessable
       end
     end
   end

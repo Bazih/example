@@ -16,6 +16,7 @@
 //= require jquery.remotipart
 //= require private_pub
 //= require cocoon
+//= require handlebars.runtime
 //= require turbolinks
-//= require handlebars
+//= require_tree ./templates
 //= require_tree .
