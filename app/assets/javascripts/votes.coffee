@@ -3,7 +3,8 @@ ready_vote = ->
   $('.vote-link').bind 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
     $('#rating-value-' + response.id).html("Rating: #{response.rating}")
-    $('#vote_up_down_' + response.id).hide()
+    $('#vote_up_' + response.id).hide()
+    $('#vote_down_' + response.id).hide()
     $('#vote_cancel_' + response.id).show()
     $('.notice').text(response.message)
   .bind 'ajax:error', (e, xhr, status, error) ->
@@ -13,7 +14,8 @@ ready_vote = ->
   $('.vote-cancel').bind 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
     $('#rating-value-' + response.id).html("Rating: #{response.rating}")
-    $('#vote_up_down_' + response.id).show()
+    $('#vote_up_' + response.id).show()
+    $('#vote_down_' + response.id).show()
     $('#vote_cancel_' + response.id).hide()
     $('.notice').text(response.message)
   .bind 'ajax:error', (e, xhr, status, error) ->

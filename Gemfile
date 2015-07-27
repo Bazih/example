@@ -18,6 +18,7 @@ gem 'remotipart'
 gem 'handlebars_assets'
 gem 'private_pub'
 gem 'thin'
+gem 'gon'
 
 group :development do
   gem 'meta_request'

@@ -23,7 +23,7 @@
   .container
     .col-md-1.text-center Number
     .col-md-4.text-center Text
-.row.answers
+.row.answers data={question_id: "#{@question.id}"}
   = render @question.answers
 
 .row
@@ -51,3 +51,5 @@
 .row
   .container
     .col-md-1= link_to 'To questions', questions_path, class: 'btn btn-default'
+
+= subscribe_to "/questions/#{@question.id}/answers"

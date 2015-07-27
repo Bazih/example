@@ -17,7 +17,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'render create template' do
         post :create, question_id: question, answer: attributes_for(:answer), format: :js
-        expect(response).to render_template :create
+        expect(response).to be_success
       end
 
       it 'added question belongs authorized user' do

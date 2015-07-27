@@ -2,8 +2,7 @@
   .answer.container id = "answer_#{answer.id}"
     hr
       .container.rating id="answer-#{answer.id}"
-        .answer
-          = render 'votes/rating', votable: answer, vote: answer.user_vote(current_user)
+        = render 'votes/rating', votable: answer, vote: answer.user_vote(current_user)
 
       .container.update
         .col-xs-1.text-center= answer.id
