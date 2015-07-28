@@ -55,6 +55,7 @@ class QuestionsController < ApplicationController
 
   def gon_current_user
     gon.current_user = user_signed_in? && current_user.id
+    # gon.question_user = @question.user_id  && current_user.id
   end
 
   def question_params

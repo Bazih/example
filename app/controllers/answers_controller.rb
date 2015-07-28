@@ -9,18 +9,19 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.create(answer_params)
     @answer.user = current_user
-    respond_to do |format|
-      if @answer.save
-        flash[:notice] = 'Your answer successfully created'
-        format.js do
-          PrivatePub.publish_to "/questions/#{@question.id}/answers", response: {
+
+    if @answer.save
+      # flash[:notice] = 'Your answer successfully created'
+      PrivatePub.publish_to "/questions/#{@question.id}/answers", response: {
                                     answer: @answer,
                                     attachments: @answer.attachments,
                                     }.to_json
-        end
-      else
-        format.js
-      end
+      render json: {
+        answer: @answer,
+        attachments: @answer.attachments,
+      }
+    else
+      render json: { errors: @answer.errors.full_messages }, status: :unprocessable_entity
     end
   end
 

@@ -36,13 +36,13 @@
       h3 Create new answer
     .container
       .col-md-8.text-left
-        = form_for [@question, @answer], remote: true, method: :post do |f|
+        = form_for [@question, @answer], remote: true, data: { type: :json } do |f|
           p= f.label :body, 'Enter your answer:'
           .answer-errors
             ul.error-messages.block
           p= f.text_area :body
           p Attachment:
-          = f.fields_for :attachments do |attachment|
+          = f.fields_for :attachments, data: { type: :json } do |attachment|
             = render 'answers/attachment_fields_a', :f => attachment
             .links
               = link_to_add_association 'add attachment', f, :attachments

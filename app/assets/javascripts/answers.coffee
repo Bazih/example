@@ -14,16 +14,24 @@ $ ->
   $(document).on 'page:load', ready_answer
   $(document).on('page:update', ready_answer)
 
+  addAnswer = (data) ->
+    answer = data.answer
+    #answer.isQuestionAuthor = answer.user_id == gon.question_user
+    answer.isAuthor = answer.user_id == gon.current_user
+    answer.attachments = data.attachments
+    for attach in answer.attachments
+      attach.name = attach.file.url.split('/').slice(-1)[0]
+    $('.answers').append(HandlebarsTemplates['answers/answer'](answer)) #unless answer.user_id == gon.current_user
+
   questionId = $('.answers').data('questionId')
   PrivatePub.subscribe '/questions/' + questionId + '/answers', (data, channel) ->
     response = $.parseJSON(data['response'])
-    answer = response.answer
-    answer.isAuthor = answer.user_id == gon.current_user
-    answer.attachments = response.attachments
-    for attach in answer.attachments
-      attach.name = attach.file.url.split('/').slice(-1)[0]
-    $('.answers').after(HandlebarsTemplates['answers/answer'](answer)) unless answer.user_id == gon.current_user
+    addAnswer(response)
+
+  $("form.new_answer").on 'ajax:success', (e, data, status, xhr) ->
+    response = $.parseJSON(xhr.responseText)
+    addAnswer(response) if !$('#answer_'+ response.answer.id).get
     $('.new_answer #answer_body').val('')
 
-
+    $('.notice').html('Your answer successfully added')
 
