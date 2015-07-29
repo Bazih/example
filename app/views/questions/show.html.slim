@@ -1,4 +1,4 @@
-.row.question
+.row.question data={user_id: "#{@question.user_id}"}
   .container
     h1= @question.title
     = render 'votes/rating', votable: @question, vote: @question.user_vote(current_user)

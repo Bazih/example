@@ -16,19 +16,23 @@ $ ->
 
   addAnswer = (data) ->
     answer = data.answer
-    #answer.isQuestionAuthor = answer.user_id == gon.question_user
-    answer.isAuthor = answer.user_id == gon.current_user
+
+    if gon.current_user
+      answer.isSigned = gon.current_user
+      answer.isAnswerAuthor = gon.current_user == answer.user_id
+      answer.isQuestionAuthor = gon.question_author == gon.current_user
+
     answer.attachments = data.attachments
     for attach in answer.attachments
       attach.name = attach.file.url.split('/').slice(-1)[0]
-    $('.answers').append(HandlebarsTemplates['answers/answer'](answer)) #unless answer.user_id == gon.current_user
+    $('.answers').append(HandlebarsTemplates['answers/answer'](answer))
 
   questionId = $('.answers').data('questionId')
   PrivatePub.subscribe '/questions/' + questionId + '/answers', (data, channel) ->
     response = $.parseJSON(data['response'])
     addAnswer(response)
 
-  $("form.new_answer").on 'ajax:success', (e, data, status, xhr) ->
+  $('form.new_answer').on 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
     addAnswer(response) if !$('#answer_'+ response.answer.id).get
     $('.new_answer #answer_body').val('')

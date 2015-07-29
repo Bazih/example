@@ -29,6 +29,8 @@ class QuestionsController < ApplicationController
     @question.user = current_user
 
     if @question.save
+      PrivatePub.publish_to "/questions",
+                            question: {question: @question}.to_json
       redirect_to @question, notice: 'Question successfully created!'
     else
       flash.now[:error] = 'Error, check the name or text of the question'
@@ -55,7 +57,7 @@ class QuestionsController < ApplicationController
 
   def gon_current_user
     gon.current_user = user_signed_in? && current_user.id
-    # gon.question_user = @question.user_id  && current_user.id
+    gon.question_author = @question.user_id if @question
   end
 
   def question_params

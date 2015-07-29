@@ -8,6 +8,10 @@ $ ->
       $(this).hide()
       $('form.edit_question').show()
 
+  PrivatePub.subscribe '/questions', (data, channel) ->
+    question = $.parseJSON(data['question'])
+    $('.questions').append(HandlebarsTemplates['questions/question'](question))
+
   $(document).ready ready_question
   $(document).on('page:load', ready_question)
   $(document).on('page:update', ready_question)
