@@ -10,6 +10,8 @@ $ ->
       answer_id = $(this).data('answerId')
       $('form#edit-answer-' + answer_id).show()
 
+
+
   $(document).ready ready_answer
   $(document).on 'page:load', ready_answer
   $(document).on('page:update', ready_answer)
@@ -36,6 +38,7 @@ $ ->
     response = $.parseJSON(xhr.responseText)
     addAnswer(response) if !$('#answer_'+ response.answer.id).get
     $('.new_answer #answer_body').val('')
-
     $('.notice').html('Your answer successfully added')
-
+  .on 'ajax:error', (e, xhr, status, error) ->
+    response = $.parseJSON(xhr.responseText)
+    $('.notice').html(HandlebarsTemplates['errors/error'](response))
