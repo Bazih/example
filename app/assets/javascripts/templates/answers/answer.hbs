@@ -4,7 +4,7 @@
 			<div class="answer">
 				<div class="row">
 					<b class="col-sm-1" id="rating-value-{{id}}">Rating: {{rating}} </b>
-						{{#unless isAnswerAuthor}}
+						{{#if isAnswerAuthor}}
 							<a data-type="json" class="vote-link col-sm-1" id="vote_up_{{id}}" style="display: block;" data-remote="true" rel="nofollow" data-method="patch" href="/answers/{{id}}/vote_up">
 								<i class="glyphicon glyphicon-plus"> Up</i></a>
 							<a data-type="json" class="vote-link col-sm-1" id="vote_down_{{id}}" style="display: block;" data-remote="true" rel="nofollow" data-method="patch" href="/answers/{{id}}/vote_down">
@@ -13,7 +13,7 @@
 							<i class="vote-cancel" id="vote_cancel_{{id}}" style="display:none">Voted
 								<a data-type="json" data-remote="true" rel="nofollow" data-method="delete" href="/answers/{{id}}/vote_cancel">(Cancel)</a>
 							</i>
-						{{/unless}}
+						{{/if}}
 				</div>
 			</div>
 		</div>
@@ -53,12 +53,10 @@
 				<p>Attachments:</p>
 					<ul>
 						{{#each attachments}}
-							<li id="attach-{{this.id}}">
+							<li id="attach-answer-{{this.id}}">
 								<a href="{{this.file.url}}">{{this.name}}</a>
 								{{#if ../isAnswerAuthor}}
-                  <div class="btn btn-xs btn-danger">
-                    <a id="delete-attach-{{this.id}}" class="delete-attach-link" data-remote="true" rel="nofollow" data-method="delete" href="/uploads/attachments/file/{{this.id}}/{{this.name}}">Delete file</a>
-                  </div>
+                  <a id="delete-attach-{{this.id}}" class="delete-attach-link btn btn-xs btn-danger" data-remote="true" rel="nofollow" data-method="delete" href="/attachments/{{this.id}}">Delete file</a>
 								{{/if}}
 							</li>
 						{{/each}}

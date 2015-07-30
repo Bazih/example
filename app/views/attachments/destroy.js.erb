@@ -8,7 +8,7 @@
 <% end %>
 
 <% if @attachment.attachmentable_type == 'Question' %>
-	$('li.attach-id-<%= @attachment.id %>').remove();
+	$('li#attach-question-<%= @attachment.id %>').remove();
 <% else %>
-	$('li.attach-id-answer-<%= @attachment.id %>').remove();
+	$('li#attach-answer-<%= @attachment.id %>').remove();
 <% end %>

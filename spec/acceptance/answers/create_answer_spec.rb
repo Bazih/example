@@ -16,7 +16,7 @@ feature 'Create answer for question', %q{
     fill_in 'Enter your answer:', with: 'Example body text'
     click_on 'Save answer'
 
-    expect(page).to have_content 'Your answer successfully created'
+    expect(page).to have_content 'Your answer successfully added'
     expect(page).to have_content 'Example body text'
   end
 
