@@ -11,15 +11,14 @@ class AnswersController < ApplicationController
     @answer.user = current_user
 
     if @answer.save
-      # flash[:notice] = 'Your answer successfully created'
+      render json: {
+                 answer: @answer,
+                 attachments: @answer.attachments,
+             }
       PrivatePub.publish_to "/questions/#{@question.id}/answers", response: {
                                     answer: @answer,
                                     attachments: @answer.attachments,
                                     }.to_json
-      render json: {
-        answer: @answer,
-        attachments: @answer.attachments,
-      }
     else
       render json: { errors: @answer.errors.full_messages }, status: :unprocessable_entity
     end
@@ -44,7 +43,6 @@ class AnswersController < ApplicationController
   private
 
   def load_question
-    #binding.pry
     @question = Question.find(params[:question_id])
   end
 
