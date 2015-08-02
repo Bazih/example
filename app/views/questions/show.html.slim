@@ -1,4 +1,4 @@
-.row.question data={user_id: "#{@question.user_id}"}
+.row.question data={user_id: "#{@question.user_id}"} id="question_#{@question.id}"
   .container
     h1= @question.title
     = render 'votes/rating', votable: @question, vote: @question.user_vote(current_user)
@@ -6,23 +6,23 @@
     h3= @question.body
   .container.attache
     = render 'attache'
-
-.row
   .container
     .notice
     =render 'form', remote: true
+    .container
+      -if current_user && @question.user_id == current_user.id
+        =link_to 'Edit question', '', class: 'edit-button-question btn btn-sm btn-warning'
+        =link_to 'Delete question', @question, method: :delete, class: 'btn btn-sm btn-warning'
   .container
-    -if current_user && @question.user_id == current_user.id
-      =link_to 'Edit question', '', class: 'edit-button-question btn btn-sm btn-warning'
-      =link_to 'Delete question', @question, method: :delete, class: 'btn btn-sm btn-warning'
+    h3 Comments:
+    = render 'comments/comments', commentable: @question
+
 .row
   .container
     .col-md-8
       h2 Answers:
 .row
   .container
-    .col-md-1.text-center Number
-    .col-md-4.text-center Text
 .row.answers data={question_id: "#{@question.id}"}
   = render @question.answers
 
@@ -53,3 +53,4 @@
     .col-md-1= link_to 'To questions', questions_path, class: 'btn btn-default'
 
 = subscribe_to "/questions/#{@question.id}/answers"
+= subscribe_to "/questions/#{@question.id}/comments"

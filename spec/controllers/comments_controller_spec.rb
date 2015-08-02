@@ -1,26 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe CommentsController, type: :controller do
-  sign_in_user
 
-  let(:user) { create(user) }
-  let(:question) { create(:question, user: user) }
-  let(:answer) { create(:answer, question: question, user: user) }
+  let(:question) { create(:question, user: @user) }
+  let(:answer) { create(:answer, question: question, user: @user) }
 
   describe 'POST #create' do
+    sign_in_user
+
     context 'for question with valid attributes' do
       it 'should save new comment in database' do
-        expect { post :create, question_id: question, commentable: 'questions', comment: attributes_for(:comment),
+        expect { post :create, question_id: question,
+                      commentable: 'questions', comment: attributes_for(:comment),
                       format: :js }.to change(question.comments, :count).by(1)
       end
 
       it 'should bind new comment to it\'s creator' do
-        expect { post :create,
-                      question_id: question,
-                      commentable: 'questions',
-                      comment: attributes_for(:comment),
-                      format: :js
-        }.to change(@user.comments, :count).by(1)
+        post :create, question_id: question, commentable: 'question',
+             comment: attributes_for(:comment), format: :json
+        expect(assigns(:comment).user).to eq @user
       end
 
       it 'should respond with success' do
@@ -32,11 +30,8 @@ RSpec.describe CommentsController, type: :controller do
 
     context 'for question with invalid attributes' do
       it 'doesn\'t save comment in database' do
-        expect { post :create,
-                      question_id: question,
-                      commentable: 'questions',
-                      comment: attributes_for(:invalid_comment),
-                      format: :js
+        expect { post :create, question_id: question, commentable: 'questions',
+                      comment: attributes_for(:invalid_comment), format: :js
         }.to_not change(Comment, :count)
       end
 
@@ -49,21 +44,15 @@ RSpec.describe CommentsController, type: :controller do
 
     context 'for answer with valid attributes' do
       it 'should save new comment in database' do
-        expect { post :create,
-                      answer_id: answer,
-                      commentable: 'answers',
-                      comment: attributes_for(:comment),
-                      format: :js
+        expect { post :create, answer_id: answer, commentable: 'answers',
+                      comment: attributes_for(:comment), format: :js
         }.to change(answer.comments, :count).by(1)
       end
 
       it 'should bind new comment to it\'s creator' do
-        expect { post :create,
-                      answer_id: answer,
-                      commentable: 'answers',
-                      comment: attributes_for(:comment),
-                      format: :js
-        }.to change(@user.comments, :count).by(1)
+        post :create, answer_id: answer, commentable: 'answer',
+             comment: attributes_for(:comment), format: :json
+        expect(assigns(:comment).user).to eq @user
       end
 
       it 'should respond with success' do
@@ -75,11 +64,8 @@ RSpec.describe CommentsController, type: :controller do
 
     context 'for answer with invalid attributes' do
       it 'doesn\'t save comment in database' do
-        expect { post :create,
-                      answer_id: answer,
-                      commentable: 'answers',
-                      comment: attributes_for(:invalid_comment),
-                      format: :js
+        expect { post :create, answer_id: answer, commentable: 'answers',
+                      comment: attributes_for(:invalid_comment), format: :js
         }.to_not change(Comment, :count)
       end
 

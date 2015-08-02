@@ -41,7 +41,7 @@ feature 'Question commenting', %q{
     scenario 'adds a comment', js: true do
       within '.question' do
         click_on 'Add comment'
-        fill_in 'Your comment', with: 'Test comment'
+        fill_in 'Your comment:', with: 'Test comment'
         click_on 'Submit'
 
         expect(page).to have_content 'Test comment'
@@ -52,7 +52,7 @@ feature 'Question commenting', %q{
     scenario 'cancels adding comment', js: true do
       within '.question' do
         click_on 'Add comment'
-        fill_in 'Your comment', with: 'Test comment'
+        fill_in 'Your comment:', with: 'Test comment'
         click_on 'Cancel'
 
         expect(page).to_not have_content 'Test comment'

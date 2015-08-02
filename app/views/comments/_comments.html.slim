@@ -1,0 +1,16 @@
+.comment.col-md-10.col-md-offset-2
+  .comments
+    - commentable.comments.find_each do |comment|
+      hr
+      p data={commentable_id: "#{commentable.id}"} id="comment-#{comment.id}"
+        = comment.body
+
+  hr
+  -if user_signed_in?
+    = link_to 'Add comment', '', class: 'add-comment'
+    = form_for [commentable, commentable.comments.build],
+                      remote: true, data: { type: :json } do |f|
+      = f.label :body, 'Your comment:'
+      = f.text_area :body, class: 'form-control'
+      = f.submit 'Submit', class: 'btn btn-success add-comment'
+      = link_to 'Cancel', '', class: 'cancel-comment'
