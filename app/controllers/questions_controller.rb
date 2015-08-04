@@ -6,6 +6,7 @@ class QuestionsController < ApplicationController
   before_action :gon_current_user, only: [:index, :show]
   before_action :owner_question, only: [:edit, :update, :destroy]
   before_action :build_answer, only: :show
+  after_action :publich_create, only: :create
 
   respond_to :js, only: :update
 
@@ -29,9 +30,6 @@ class QuestionsController < ApplicationController
     @question.user = current_user
 
     if @question.save
-      PrivatePub.publish_to "/questions", question: @question.to_json
-      respond_with @question
-    else
       respond_with @question
     end
   end
@@ -62,6 +60,10 @@ class QuestionsController < ApplicationController
 
   def build_answer
     @answer = @question.answers.build
+  end
+
+  def publich_create
+    PrivatePub.publish_to "/questions", question: @question.to_json if @question.valid?
   end
 
   def owner_question
