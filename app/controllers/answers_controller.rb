@@ -2,9 +2,12 @@ class AnswersController < ApplicationController
   include Voting
 
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:create]#except: [:edit, :best, :update, :destroy, :vote_up, :vote_down, :vote_cancel]
+  before_action :load_question, only: [:create]
   before_action :load_answer, except: [:create]
   before_action :owner_answer, except: [:create, :best, :vote_up, :vote_down, :vote_cancel]
+
+  respond_to :js
+  respond_to :json, only: :create
 
   def create
     @answer = @question.answers.create(answer_params)
@@ -32,12 +35,11 @@ class AnswersController < ApplicationController
 
   def update
     @answer.update(answer_params)
-    flash[:notice] = 'Your answer successfully update'
+    respond_with @answer
   end
 
   def destroy
-    @answer.destroy
-    flash[:notice] = 'Your answer delete'
+    respond_with(@answer.destroy)
   end
 
   private

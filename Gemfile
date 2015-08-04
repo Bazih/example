@@ -19,6 +19,7 @@ gem 'handlebars_assets'
 gem 'private_pub'
 gem 'thin'
 gem 'gon'
+gem 'responders', '~> 2.0'
 
 group :development do
   gem 'meta_request'

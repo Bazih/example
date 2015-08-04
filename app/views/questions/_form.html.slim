@@ -7,7 +7,7 @@
     p= f.label :body, 'Text question'
     p= f.text_area :body
     p Attachmetns:
-    = f.fields_for :attachments, remote: remote do |attachment|
+    = f.fields_for :attachments, @question.attachments.build, remote: remote do |attachment|
       .links
         = link_to_add_association 'add attachment', f, :attachments
       = render 'attachment_fields', :f => attachment
