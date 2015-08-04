@@ -19,7 +19,7 @@ feature 'Deleting a response by the author', %q{
     click_on question.title
     click_on 'Delete answer'
 
-    expect(page).to have_content 'Your answer delete'
+    expect(page).to have_content 'Your Answer was successfully destroyed.'
     expect(page).to_not have_content answer.body
   end
 

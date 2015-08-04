@@ -5,20 +5,20 @@ class QuestionsController < ApplicationController
   before_action :load_question, only: [:show, :edit, :update, :destroy]
   before_action :gon_current_user, only: [:index, :show]
   before_action :owner_question, only: [:edit, :update, :destroy]
+  before_action :build_answer, only: :show
+
+  respond_to :js, only: :update
 
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def show
-    @answer = @question.answers.build
-    @answer.attachments.build
+    respond_with @question
   end
 
   def new
-    @question = Question.new
-    @question.answers.build
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def edit
@@ -30,22 +30,19 @@ class QuestionsController < ApplicationController
 
     if @question.save
       PrivatePub.publish_to "/questions", question: @question.to_json
-      redirect_to @question, notice: 'Question successfully created!'
+      respond_with @question
     else
-      flash.now[:error] = 'Error, check the name or text of the question'
-      render :new
+      respond_with @question
     end
   end
 
   def update
     @question.update(question_params)
-    flash[:notice] = 'Question successfully updated!'
+    respond_with @question
   end
 
   def destroy
-    @question.destroy
-    flash[:notice] = 'Your question was successfully deleted'
-    redirect_to questions_path
+    respond_with(@question.destroy)
   end
 
   private
@@ -61,6 +58,10 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy])
+  end
+
+  def build_answer
+    @answer = @question.answers.build
   end
 
   def owner_question

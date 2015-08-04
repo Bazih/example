@@ -41,7 +41,7 @@ feature 'Edit answer', %q{
         expect(page).to have_content 'Updated text'
         expect(page).to_not have_selector 'textarea'
       end
-      expect(page).to have_content 'Your answer successfully update'
+      expect(page).to have_content 'Answer was successfully updated.'
     end
 
     scenario 'when the data is not valid', js: true do

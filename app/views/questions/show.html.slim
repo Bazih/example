@@ -42,7 +42,7 @@
             ul.error-messages.block
           p= f.text_area :body
           p Attachment:
-          = f.fields_for :attachments, data: { type: :json } do |attachment|
+          = f.fields_for :attachments, @answer.attachments.build, data: { type: :json } do |attachment|
             = render 'answers/attachment_fields_a', :f => attachment
             .links
               = link_to_add_association 'add attachment', f, :attachments

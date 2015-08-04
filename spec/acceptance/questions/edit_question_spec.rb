@@ -37,7 +37,7 @@ feature 'Edit your question', %q{
       fill_in 'Text question', with: 'Updated text'
       click_on 'Save'
 
-      expect(page).to have_content 'Question successfully updated!'
+      expect(page).to have_content 'Question was successfully updated.'
       expect(page).to have_content 'Updated title'
       expect(page).to have_content 'Updated text'
     end

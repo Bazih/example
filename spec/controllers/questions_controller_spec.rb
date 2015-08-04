@@ -27,10 +27,6 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
-    it 'build new attachment for answer' do
-      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
-    end
-
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -42,10 +38,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
-    end
-
-    it 'build new attachment for question' do
-      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
     end
 
     it 'render new view' do
@@ -128,20 +120,6 @@ RSpec.describe QuestionsController, type: :controller do
           expect(response).to render_template :update
         end
       end
-
-      # context 'when invalid attributes' do
-      #   before { patch :update, id: question, question: { title: 'new_title', body: 'new body' } }
-      #
-      #   it 'does not change question attributes' do
-      #     question.reload
-      #     expect(question.title).to eq question.title
-      #     expect(question.body).to eq 'new body'
-      #   end
-      #
-      #   it 're-render edit view' do
-      #     expect(response).to render_template :edit
-      #   end
-      # end
     end
 
     context 'non-owner question' do
