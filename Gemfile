@@ -20,6 +20,8 @@ gem 'private_pub'
 gem 'thin'
 gem 'gon'
 gem 'responders', '~> 2.0'
+gem 'omniauth'
+gem 'omniauth-facebook'
 
 group :development do
   gem 'meta_request'
