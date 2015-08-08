@@ -22,10 +22,12 @@ gem 'gon'
 gem 'responders', '~> 2.0'
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'omniauth-twitter'
 
 group :development do
   gem 'meta_request'
   gem 'foreman', require: false
+  gem 'letter_opener'
 end
 
 group :development, :test do
@@ -48,5 +50,6 @@ group :test do
   gem 'database_cleaner'
   gem 'capybara-webkit'
   gem 'test_after_commit'
+  gem 'capybara-email'
 end
 

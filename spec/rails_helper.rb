@@ -3,6 +3,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require 'spec_helper'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
+require 'capybara/email/rspec'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -23,6 +24,7 @@ Dir[Rails.root.join('spec/models/shared_examples/**/*.rb')].each { |f| require f
 Dir[Rails.root.join('spec/controllers/shared_examples/**/*.rb')].each { |f| require f }
 Capybara.server_port = 3100
 Capybara.server_host = '0.0.0.0'
+OmniAuth.config.test_mode = true
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -31,6 +33,7 @@ ActiveRecord::Migration.maintain_test_schema!
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Devise::TestHelpers, type: :controller
+  config.include OmniauthMacros
 
   config.extend ControllerMacros, type: :controller
 

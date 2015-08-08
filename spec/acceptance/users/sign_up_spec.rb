@@ -7,15 +7,16 @@ feature 'User sign up', %q{
 } do
 
   scenario 'User registration successful' do
-    visit root_path
-    click_on 'Sign up'
+    clear_emails
 
-    user_attrs = attributes_for(:user)
-    fill_in 'Email', with: user_attrs[:email]
-    fill_in 'Password', with: user_attrs[:password]
-    fill_in 'Password confirmation', with: user_attrs[:password_confirmation]
-    click_button 'Sign up'
+    attributes = attributes_for(:user)
+    sign_up(attributes)
 
-    expect(page).to have_content 'Welcome! You have signed up successfully.'
+    expect(page).to have_content 'A message with a confirmation link has been sent to your email address'
+
+    open_email(attributes[:email])
+    current_email.click_link 'Confirm my account'
+
+    expect(page).to have_content 'Your email address has been successfully confirmed'
   end
 end

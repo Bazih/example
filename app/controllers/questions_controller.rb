@@ -26,12 +26,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.user = current_user
-
-    if @question.save
-      respond_with @question
-    end
+    respond_with (@question = current_user.questions.create(question_params))
   end
 
   def update

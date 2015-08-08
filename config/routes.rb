@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
     devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
+    match '/users/validate_sign_up' => 'users#validate_sign_up', via: [:get, :post], :as => :validate_sign_up
 
     root 'questions#index'
 
