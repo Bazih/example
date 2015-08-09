@@ -26,7 +26,8 @@ class User < ActiveRecord::Base
   end
 
   def self.find_for_oauth(auth)
-    authorization = Authorization.find_by(provider: auth.provider, uid: auth.uid.to_s)
+    # binding.pry
+    authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
     return authorization.user if authorization
 
     email = (auth['info'].present? and auth.info[:email].present?) ? auth.info[:email] : nil
