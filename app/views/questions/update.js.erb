@@ -1,11 +1,13 @@
-$('.notice').html('');
+$('.alert-success').html('');
+$('.alert-danger').html('');
 $('.question-errors ul').html('');
 <% if @question.errors.present? %>
 	<% @question.errors.full_messages.each do |message| %>
 		$('.question-errors ul').append( '<li><%= j message %></li>' );
+		$('.alert_danger').append( '<li><%= j message %></li>' );
 	<% end %>
 <% else %>
-	$('.notice').html( '<%= flash[:notice] %>' );
+	$('.alert-success').html( '<%= flash[:notice] %>' );
 	$( '.question' ).html( '<%= j render @question %>' );
 	$('form.edit_question').hide();
 	$('.edit-button-question').show();

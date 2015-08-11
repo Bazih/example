@@ -38,7 +38,7 @@ $ ->
     response = $.parseJSON(xhr.responseText)
     addAnswer(response) if !$('#answer_'+ response.answer.id).get
     $('.new_answer #answer_body').val('')
-    $('.notice').html('Your answer successfully added')
+    $('.alert-success').html('Your answer successfully added')
   .on 'ajax:error', (e, xhr, status, error) ->
     response = $.parseJSON(xhr.responseText)
-    $('.notice').html(HandlebarsTemplates['errors/error'](response))
+    $('alert-danger').html(HandlebarsTemplates['errors/error'](response))

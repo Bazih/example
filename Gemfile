@@ -23,6 +23,7 @@ gem 'responders', '~> 2.0'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
+gem 'cancancan'
 
 group :development do
   gem 'meta_request'
