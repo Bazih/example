@@ -38,14 +38,14 @@ ready = ->
     response = $.parseJSON(xhr.responseText)
 
     $form = $(this).closest('form')
-    $errors = $form.children('.error_explanation')
+    $errors = $form.children('.alert-danger')
     errorsHtml = HandlebarsTemplates['errors/error'](response)
 
     if $errors.length
       $errors.html(errorsHtml)
     else
       $form.prepend(errorsHtml)
-      $errors = $form.children('.error_explanation')
+      $errors = $form.children('.alert-danger')
 
     $errors.stop().css( {opacity: 1} ).fadeOut 5000, ->
       $(this).remove()

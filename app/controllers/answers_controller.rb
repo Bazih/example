@@ -9,6 +9,8 @@ class AnswersController < ApplicationController
   respond_to :js
   respond_to :json, only: :create
 
+  authorize_resource
+
   def create
     @answer = @question.answers.create(answer_params)
     @answer.user = current_user

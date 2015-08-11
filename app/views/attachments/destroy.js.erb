@@ -1,9 +1,9 @@
 <% if flash[:alert] %>
-	$('.alert').append('<br/> <%= flash[:alert] %>');
+	$('.alert-danger').append('<br/> <%= flash[:alert] %>');
 	<% flash[:alert] = '' %>
 <% end %>
 <% if flash[:notice] %>
-	$('.notice').append('<br/> <%= flash[:notice] %>');
+	$('.alert-success').append('<br/> <%= flash[:notice] %>');
 	<% flash[:notice] = '' %>
 <% end %>
 
