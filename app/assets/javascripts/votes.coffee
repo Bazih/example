@@ -6,10 +6,10 @@ ready_vote = ->
     $('#vote_up_' + response.id).hide()
     $('#vote_down_' + response.id).hide()
     $('#vote_cancel_' + response.id).show()
-    $('.notice').text(response.message)
+    $('.alert-success').text(response.message)
   .bind 'ajax:error', (e, xhr, status, error) ->
     response = $.parseJSON(xhr.responseText)
-    $('.notice').text(response.error)
+    $('.alert-danger').text(response.error)
 
   $('.vote-cancel').bind 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
@@ -17,10 +17,10 @@ ready_vote = ->
     $('#vote_up_' + response.id).show()
     $('#vote_down_' + response.id).show()
     $('#vote_cancel_' + response.id).hide()
-    $('.notice').text(response.message)
+    $('.alert-success').text(response.message)
   .bind 'ajax:error', (e, xhr, status, error) ->
     response = $.parseJSON(xhr.responseText)
-    $('.notice').text(response.error)
+    $('.alert-danger').text(response.error)
 
 $(document).ready(ready_vote)
 $(document).on('page:load', ready_vote)

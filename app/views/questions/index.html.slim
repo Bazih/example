@@ -15,14 +15,14 @@
             .col-md-2
               = link_to 'Delete question', question_path(question), method: :delete, class: 'btn btn-xs btn-warning'
 
-.row
-  .container
-    .col-md-8.text-left
-      h4 Create new question
-.row
-  .container
-    .col-md-8.text-left
-      = link_to 'Create question', new_question_path, class: 'btn btn-default'
+-if can?(:create, Question)
+  .row
+    .container
+      .col-md-8.text-left
+        h4 Create new question
+    .container
+      .col-md-8.text-left
+        = link_to 'Create question', new_question_path, class: 'btn btn-default'
 br
 
 = subscribe_to "/questions"

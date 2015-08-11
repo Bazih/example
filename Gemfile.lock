@@ -51,6 +51,7 @@ GEM
     byebug (5.0.0)
       columnize (= 0.9.0)
     callsite (0.0.11)
+    cancancan (1.12.0)
     capybara (2.4.4)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -321,6 +322,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootstrap-sass
+  cancancan
   capybara
   capybara-email
   capybara-webkit
