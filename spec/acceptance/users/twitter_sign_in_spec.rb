@@ -49,12 +49,6 @@ feature 'User can be authenticated via twitter', %q{
       expect(page).to have_content 'Your email address has been successfully confirmed'
     end
 
-    scenario 'can handle authentication error' do
-      OmniAuth.config.mock_auth[:twitter] = :invalid_credentials
-      sign_in_with_twitter
-      expect(page).to have_content('Could not authenticate you from Twitter')
-    end
-
     scenario 'not allowed to log in at second attempt without email confirmation' do
       sign_in_with_twitter
       fill_fields

@@ -18,11 +18,5 @@ feature 'User can be authenticated via facebook', %q{
 
       expect(page).to have_content('Successfully authenticated from Facebook account.')
     end
-
-    scenario 'can handle authentication error' do
-      OmniAuth.config.mock_auth[:facebook] = :invalid_credentials
-      sign_in_with_facebook
-      expect(page).to have_content('Could not authenticate you from Facebook')
-    end
   end
 end
