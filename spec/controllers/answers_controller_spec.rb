@@ -62,20 +62,6 @@ RSpec.describe AnswersController, type: :controller do
           expect(answer).to render_template :update
         end
       end
-
-      # context 'when invalid attributes' do
-      #   before { patch :update, id: answer, question_id: question, answer: { body: nil } }
-      #
-      #   it 'does not change answer attributes' do
-      #     answer.reload
-      #     puts answer.body
-      #     expect(answer.body).to eq answer.body
-      #   end
-      #
-      #   it 're-render edit view' do
-      #     expect(response).to render_template :edit
-      #   end
-      # end
     end
 
     context 'update is non owner user' do

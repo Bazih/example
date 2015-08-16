@@ -10,8 +10,6 @@ $ ->
       answer_id = $(this).data('answerId')
       $('form#edit-answer-' + answer_id).show()
 
-
-
   $(document).ready ready_answer
   $(document).on 'page:load', ready_answer
   $(document).on('page:update', ready_answer)
@@ -29,11 +27,6 @@ $ ->
       attach.name = attach.file.url.split('/').slice(-1)[0]
     $('.answers').append(HandlebarsTemplates['answers/answer'](answer))
 
-  questionId = $('.answers').data('questionId')
-  PrivatePub.subscribe '/questions/' + questionId + '/answers', (data, channel) ->
-    response = $.parseJSON(data['response'])
-    addAnswer(response)
-
   $('form.new_answer').on 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
     addAnswer(response) if !$('#answer_'+ response.answer.id).get
@@ -41,4 +34,9 @@ $ ->
     $('.alert-success').html('Your answer successfully added')
   .on 'ajax:error', (e, xhr, status, error) ->
     response = $.parseJSON(xhr.responseText)
-    $('alert-danger').html(HandlebarsTemplates['errors/error'](response))
+    $('.alert-danger').html(HandlebarsTemplates['errors/error'](response))
+
+  questionId = $('.answers').data('questionId')
+  PrivatePub.subscribe '/questions/' + questionId + '/answers', (data, channel) ->
+    response = $.parseJSON(data['response'])
+    addAnswer(response)
