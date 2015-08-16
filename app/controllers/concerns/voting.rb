@@ -5,7 +5,7 @@ module Voting
 
   included do
     before_action :find_votable, only: [:vote_up, :vote_down, :vote_cancel]
-    before_action :permit_voting, only: [:vote_up, :vote_down, :vote_cancel]
+    before_action :authorize_voting, only: [:vote_up, :vote_down, :vote_cancel]
   end
 
   def vote_up
@@ -62,10 +62,7 @@ module Voting
     @votable = model_klass.find(params[:id])
   end
 
-  def permit_voting
-    return unless @votable.user_id == current_user.id
-
-    render json: { error: "You can't vote for your own #{@votable.model_name.name}" },
-           status: :forbidden
+  def authorize_voting
+    authorize! action_name.to_sym, @votable
   end
 end

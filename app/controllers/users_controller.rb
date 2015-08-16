@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  skip_authorization_check
 
   def validate_sign_up
     @user = User.new

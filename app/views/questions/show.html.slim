@@ -10,8 +10,9 @@
     .notice
     =render 'form', remote: true
     .container
-      -if current_user && @question.user_id == current_user.id
+      -if can?(:crud, @question)
         =link_to 'Edit question', '', class: 'edit-button-question btn btn-sm btn-warning'
+      -if can?(:crud, @question)
         =link_to 'Delete question', @question, method: :delete, class: 'btn btn-sm btn-warning'
   .container
     h3 Comments:
@@ -30,7 +31,7 @@
   .container
     .notice
 
-- if current_user
+- if can?(:create, @answer)
   .row.new_answer
     .container
       h3 Create new answer
