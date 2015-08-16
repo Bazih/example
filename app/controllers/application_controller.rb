@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  check_authorization :unless => :devise_controller?
+
   private
 
   rescue_from CanCan::AccessDenied do
@@ -16,6 +18,4 @@ class ApplicationController < ActionController::Base
       format.any(:json, :js) { render nothing: true, status: :forbidden }
     end
   end
-
-  check_authorization
 end

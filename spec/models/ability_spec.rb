@@ -23,27 +23,26 @@ RSpec.describe Ability do
     let(:user) { create :user }
     let(:other) { create :user }
     let(:question) { create(:question, user: user) }
+    let(:question_other) { create(:question, user: other) }
     let(:answer) { create(:answer, question: question, user: user) }
-    let(:answer_to_other) { create(:answer, question: question, user: other) }
-    let(:user_attach_for_question) do
-      create(:attachment, attachmentable: question)
-    end
-    let(:user_attach_for_answer) do
-      create(:attachment, attachmentable: answer)
-    end
-    let(:voted_up_question) do
-      create(question).vote_up(user, 1)
-    end
-    let(:voted_up_answer) do
-      create(answer).vote_up(user, 1)
-    end
-    let(:voted_down_question) do
-      question.vote_down
-    end
-    let(:voted_down_answer) do
-      create(answer).vote_down(user, -1)
-    end
+    let(:answer_other) { create(:answer, question: question, user: other) }
 
+    let(:user_attach_for_question) { create(:attachment, attachmentable: question) }
+    let(:user_attach_for_answer) { create(:attachment, attachmentable: answer) }
+
+    let(:voted_up_question) { question.make_vote(user, 1) }
+    let(:voted_up_question_other) { question.make_vote(other, 1) }
+    let(:voted_down_question) { question.make_vote(user, -1) }
+    let(:voted_down_question_other) { question_other.make_vote(other, -1) }
+    let(:up_vote_question) { create(:vote_up, user: user, votable: question_other) }
+    let(:down_vote_question) { create(:vote_down, user: user, votable: question_other) }
+
+    let(:voted_up_answer) { answer.make_vote(user, 1) }
+    let(:voted_up_answer_other) { answer_other.make_vote(other, 1) }
+    let(:voted_down_answer) { answer.make_vote(user, -1) }
+    let(:voted_down_answer_other) { answer_other.make_vote(other, -1) }
+    let(:up_vote_answer) { create(:vote_up, user: user, votable: answer_other) }
+    let(:down_vote_answer) { create(:vote_down, user: user, votable: answer_other) }
 
     it { should_not be_able_to :manage, :all }
     it { should be_able_to :read, :all }
@@ -53,10 +52,10 @@ RSpec.describe Ability do
     it { should be_able_to :create, Comment }
 
     it { should be_able_to :crud, question, user: user }
-    it { should_not be_able_to :crud, create(:question, user: other), user: user }
+    it { should_not be_able_to :crud, question_other, user: user }
 
-    it { should be_able_to :crud, create(:answer, question: question, user: user), user: user }
-    it { should_not be_able_to :crud, create(:answer, question: question, user: other), user: user }
+    it { should be_able_to :crud, answer, user: user }
+    it { should_not be_able_to :crud, answer_other, user: user }
 
     it { should be_able_to :manage, user_attach_for_question }
     it { should_not be_able_to :manage, question }
@@ -64,18 +63,75 @@ RSpec.describe Ability do
     it { should be_able_to :manage, user_attach_for_answer }
     it { should_not be_able_to :manage, answer }
 
-    it { should be_able_to :best, answer_to_other }
+    it { should be_able_to :best, answer_other }
     it { should_not be_able_to :best, @answer }
 
-    it { should be_able_to :vote_down, @question.vote_down }
-    it { should_not be_able_to :vote_up, eval("voted_up_#{resource}") }
 
-    it { should be_able_to :vote_up, eval("voted_down_#{resource}") }
-    it { should_not be_able_to :vote_down, eval("voted_down_#{resource}") }
+    it 'should be able to vote_up Question' do
+      voted_up_question_other
+      should be_able_to :vote_up, question_other
+    end
+    it 'should_not be able to vote_up Question' do
+      voted_up_question
+      should_not be_able_to :vote_up, question
+    end
+    it 'should be able to vote_down Question' do
+      voted_down_question_other
+      should be_able_to :vote_down, question_other
+    end
+    it 'should not be able to vote_down Question' do
+      voted_down_question
+      should_not be_able_to :vote_down, question
+    end
+    it 'up_vote should be able to vote_cancel other Question' do
+      up_vote_question
+      should be_able_to :vote_cancel, question_other
+    end
+    it 'down_vote should be able to vote_cancel other Question' do
+      down_vote_question
+      should be_able_to :vote_cancel, question_other
+    end
+    it 'up_vote should not be able to vote_cancel Question' do
+      up_vote_question
+      should_not be_able_to :vote_cancel, question
+    end
+    it 'down_vote should not be able to vote_cancel Question' do
+      down_vote_question
+      should_not be_able_to :vote_cancel, question
+    end
 
-    it { should be_able_to :vote_cancel, eval("voted_up_#{resource}") }
-    it { should be_able_to :vote_cancel, eval("voted_down_#{resource}") }
-    # Check user can't cancel vote to votable which he haven't vote
-    it { should_not be_able_to :vote_cancel, eval(resource) }
+
+    it 'should be able to vote_up Answer' do
+      voted_up_answer_other
+      should be_able_to :vote_up, answer_other
+    end
+    it 'should_not be able to vote_up Answer' do
+      voted_up_answer
+      should_not be_able_to :vote_up, answer
+    end
+    it 'should be able to vote_down Answer' do
+      voted_down_answer_other
+      should be_able_to :vote_down, answer_other
+    end
+    it 'should not be able to vote_down Answer' do
+      voted_down_answer
+      should_not be_able_to :vote_down, answer
+    end
+    it 'up_vote should be able to vote_cancel other Answer' do
+      up_vote_answer
+      should be_able_to :vote_cancel, answer_other
+    end
+    it 'down_vote should be able to vote_cancel other Answer' do
+      down_vote_answer
+      should be_able_to :vote_cancel, answer_other
+    end
+    it 'up_vote should not be able to vote_cancel Answer' do
+      up_vote_answer
+      should_not be_able_to :vote_cancel, answer
+    end
+    it 'down_vote should not be able to vote_cancel Answer' do
+      down_vote_answer
+      should_not be_able_to :vote_cancel, answer
+    end
   end
 end
