@@ -4,13 +4,13 @@ FactoryGirl.define do
   factory :question do
     title
     body 'MyText'
-    :user
+    user
   end
 
   factory :invalid_question, class: 'Question' do
     title nil
     body nil
-    :user
+    user
   end
 
 end

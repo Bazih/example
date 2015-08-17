@@ -5,7 +5,7 @@
   .container
     h3= @question.body
   .container.attache
-    = render 'attache'
+    = render 'attachments/attache', attache: @question
   .container
     .notice
     =render 'form', remote: true

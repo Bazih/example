@@ -1,7 +1,0 @@
-h4 Attachments:
-ul
-- @question.attachments.each do |a|
-  li id="attach-question-#{a.id}"
-    = link_to a.file.identifier, a.file.url
-    - if current_user && @question.user_id == current_user.id
-      = link_to 'Delete file', attachment_path(a), method: :delete, remote: true, class: 'btn btn-xs btn-danger'

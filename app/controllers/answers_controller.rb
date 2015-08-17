@@ -4,7 +4,6 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:create]
   before_action :load_answer, except: [:create]
-  before_action :owner_answer, except: [:create, :best, :vote_up, :vote_down, :vote_cancel]
 
   respond_to :js
   respond_to :json, only: :create
@@ -31,7 +30,7 @@ class AnswersController < ApplicationController
 
   def best
     @best = @answer.question.best_answer
-    @answer.make_the_best if @answer.question.user_id == current_user.id
+    @answer.make_the_best
     @best.reload if @best
   end
 
@@ -56,9 +55,5 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body, attachments_attributes: [:id, :file, :_destroy])
-  end
-
-  def owner_answer
-    redirect_to question_path, notice: 'Access denied' unless @answer.user_id == current_user.id
   end
 end

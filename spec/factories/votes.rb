@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :vote do
-    :user
+    user
 
     trait :value_up do
       value 1

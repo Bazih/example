@@ -35,7 +35,7 @@ class Ability
     end
 
     can :best, Answer do |answer|
-      user.owns?(answer.question)
+      user.owns?(answer.question) && !user.owns?(answer)
     end
 
     can :vote_up, [Question, Answer] do |votable|

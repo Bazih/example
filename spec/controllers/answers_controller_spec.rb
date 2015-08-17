@@ -59,13 +59,13 @@ RSpec.describe AnswersController, type: :controller do
         end
 
         it 'render update template' do
-          expect(answer).to render_template :update
+          expect(response).to render_template :update
         end
       end
     end
 
     context 'update is non owner user' do
-      before { patch :update, question_id: question, id: answer, answer: { body: 'text body' } }
+      before { patch :update, question_id: question, id: answer, answer: { body: 'text body' }, format: :js }
 
       it 'does not change answer attributes'do
         question.reload
@@ -73,7 +73,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'redirect to question' do
-        expect(response).to redirect_to question_path
+        expect(response.status).to eq 403
       end
     end
   end
@@ -105,27 +105,26 @@ RSpec.describe AnswersController, type: :controller do
             .to_not change(Answer, :count)
       end
 
-      it 'redirect to root path' do
+      it 'return 403 status' do
         delete :destroy, id: answer, format: :js
-        expect(response).to redirect_to question_path
+        expect(response.status).to eq 403
       end
     end
   end
 
   describe 'POST #best' do
     sign_in_user
-    let(:answer_owner) { create(:answer, question: question, user: @user) }
 
-    context 'the author' do
-      before { post :best, question_id: question, id: answer_owner, format: :js }
+    let(:answer_owner) { create(:answer, question: question, user: user) }
 
-      it 'make the answer the best' do
-        expect(answer.reload.make_the_best).to eq true
+    context 'the author of question' do
+      before do
+        question.update!(user: @user)
+        post :best, question_id: question, id: answer_owner, format: :js
       end
 
-      it 'assigns best answer' do
-        answer_owner.reload.make_the_best
-        expect(assigns(:answer).best).to_not eq answer_owner.best
+      it 'make the answer the best' do
+        expect(answer_owner.reload).to be_best
       end
 
       it 'render template best' do

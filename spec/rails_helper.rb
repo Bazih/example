@@ -23,8 +23,6 @@ require 'cancan/matchers'
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 Dir[Rails.root.join('spec/models/shared_examples/**/*.rb')].each { |f| require f }
 Dir[Rails.root.join('spec/controllers/shared_examples/**/*.rb')].each { |f| require f }
-Capybara.server_port = 3100
-Capybara.server_host = '0.0.0.0'
 OmniAuth.config.test_mode = true
 
 # Checks for pending migrations before tests are run.

@@ -7,9 +7,10 @@ feature 'Adding the best answer for your question', %q{
 } do
 
   given(:author) { create(:user) }
-  given!(:question) { create(:question, user: author) }
-  given!(:answers) { create_list(:answer, 5, question: question, user: author) }
   given(:non_author) { create(:user) }
+  given!(:question) { create(:question, user: author) }
+  given!(:answers) { create_list(:answer, 5, question: question, user: non_author) }
+
 
   scenario 'No authenticated user wants to select the best answer' do
     visit question_path(question)
