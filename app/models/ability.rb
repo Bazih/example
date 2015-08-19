@@ -48,7 +48,7 @@ class Ability
       !user.owns?(votable) && votable.voted_by?(user)
     end
 
-    can :me, User, user: user
+    can :me, User, is: user.id
   end
 
   def can_vote?(votable, value)
