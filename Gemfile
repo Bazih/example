@@ -24,6 +24,7 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 gem 'cancancan'
+gem 'doorkeeper'
 
 group :development do
   gem 'meta_request'
@@ -52,5 +53,6 @@ group :test do
   gem 'capybara-webkit'
   gem 'test_after_commit'
   gem 'capybara-email'
+  gem 'json_spec'
 end
 

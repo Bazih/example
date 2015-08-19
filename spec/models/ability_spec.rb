@@ -133,5 +133,7 @@ RSpec.describe Ability do
       down_vote_answer
       should_not be_able_to :vote_cancel, answer
     end
+
+    it { should be_able_to :me, User }
   end
 end

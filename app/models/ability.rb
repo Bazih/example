@@ -47,6 +47,8 @@ class Ability
     can :vote_cancel, [Question, Answer] do |votable|
       !user.owns?(votable) && votable.voted_by?(user)
     end
+
+    can :me, User, user: user
   end
 
   def can_vote?(votable, value)
