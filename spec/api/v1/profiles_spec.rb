@@ -61,7 +61,7 @@ describe 'Profile API' do
       end
 
       it 'contains a list of users' do
-        expect(response.body).to be_json_eql(users.to_json)
+        expect(response.body).to be_json_eql(users.to_json).at_path('profiles')
       end
 
       it 'does not containt requesting user' do
@@ -72,7 +72,7 @@ describe 'Profile API' do
         it "contains #{attr}" do
           users.each_with_index do |user, index|
             expect(response.body).to be_json_eql(user.send(attr.to_sym).to_json)
-                                         .at_path("#{index}/#{attr}")
+                                         .at_path("profiles/#{index}/#{attr}")
           end
         end
       end
@@ -80,7 +80,7 @@ describe 'Profile API' do
       %w(password encrypted_password).each do |attr|
         it "does not contain #{attr}" do
           users.each_with_index do |_user, index|
-            expect(response.body).to_not have_json_path("#{index}/#{attr}")
+            expect(response.body).to_not have_json_path("profiles/#{index}/#{attr}")
           end
         end
       end
