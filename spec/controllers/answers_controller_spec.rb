@@ -9,6 +9,14 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     sign_in_user
 
+    let(:publish_path) { "/questions/#{question.id}/answers" }
+    let(:request) do
+      post :create, question_id: question.id, answer: attributes_for(:answer), format: :json
+    end
+    let(:invalid_params_request) do
+      post :create, question_id: question.id, answer: attributes_for(:invalid_answer), format: :json
+    end
+
     context 'when valid attributes' do
       it 'saves the new answer in the database' do
         expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }
@@ -37,6 +45,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to be_unprocessable
       end
     end
+
+    it_behaves_like 'publishable'
   end
 
 

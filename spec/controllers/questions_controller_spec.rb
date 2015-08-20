@@ -62,6 +62,10 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'POST #create' do
     sign_in_user
 
+    let(:publish_path) { '/questions' }
+    let(:request) { post :create, question: attributes_for(:question) }
+    let(:invalid_params_request) { post :create, question: attributes_for(:invalid_question) }
+
     context 'when valid attributes' do
 
       it 'saves the new question in the database' do
@@ -91,6 +95,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :new
       end
     end
+
+    it_behaves_like 'publishable'
   end
 
   describe 'PATCH #update' do

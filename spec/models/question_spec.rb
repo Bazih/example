@@ -11,7 +11,7 @@ RSpec.describe Question, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
   it { should belong_to(:user) }
 
-  it_should_behave_like 'attachmentable'
+  it_behaves_like 'attachmentable'
   let(:user) { create(:user) }
   let(:votable) { create(described_class.to_s.underscore.to_sym, user: user) }
   it_behaves_like 'votable'
@@ -26,4 +26,5 @@ RSpec.describe Question, type: :model do
       expect(question.best_answer).to eq best_answer
     end
   end
+  it_behaves_like 'commentable'
 end

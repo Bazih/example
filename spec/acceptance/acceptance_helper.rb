@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.configure do |config|
 
-  Capybara.server_port = 3100
-  Capybara.server_host = '0.0.0.0'
+  # Capybara.server_port = 3100
+  # Capybara.server_host = '0.0.0.0'
 
   Capybara.default_wait_time = 5
   Capybara.javascript_driver = :webkit
@@ -17,6 +17,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
+    # page.driver.allow_url('0.0.0.0')
     DatabaseCleaner.strategy = :transaction
   end
 
@@ -26,7 +27,6 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.start
-    # page.driver.allow_url("0.0.0.0")
   end
 
   config.after(:each) do

@@ -4,8 +4,8 @@
     = render 'votes/rating', votable: @question, vote: @question.user_vote(current_user)
   .container
     h3= @question.body
-  .container.attache
-    = render 'attachments/attache', attache: @question
+  .container.attach
+    = render 'attachments/attach', attach: @question
   .container
     .notice
     =render 'form', remote: true

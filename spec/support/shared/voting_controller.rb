@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 shared_examples 'voting' do
   sign_in_user
 

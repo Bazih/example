@@ -1,7 +1,7 @@
 h4 Attachments:
 ul
-  - attache.attachments.each do |a|
-   li id="attach-#{attache.class.name.to_s.downcase}-#{a.id}"
+  - attach.attachments.each do |a|
+   li id="attach-#{attach.class.name.to_s.downcase}-#{a.id}"
      = link_to a.file.identifier, a.file.url
      -if can?(:manage, a)
        = link_to 'Delete file', attachment_path(a), method: :delete, remote: true, class: 'btn btn-xs btn-danger'

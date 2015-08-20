@@ -7,17 +7,7 @@ describe 'Answers API' do
   describe 'GET #index' do
     let(:url) { api_v1_question_answers_path(question) }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get url, format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns 401 status if access_token is not valid' do
-        get url, format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API Authenticable'
 
     context 'authorized' do
       let!(:answers) { create_pair(:answer, question: question) }
@@ -48,17 +38,7 @@ describe 'Answers API' do
     let!(:answer) { create(:answer) }
     let(:url) { api_v1_answer_path(answer) }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get url, format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns 401 status if access_token is not valid' do
-        get url, format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API Authenticable'
 
     context 'authorized' do
       let!(:attach) { create(:attachment, attachmentable: answer) }
@@ -107,17 +87,7 @@ describe 'Answers API' do
     let(:url) { api_v1_question_answers_path(question) }
     let(:current_user) { User.find(access_token.resource_owner_id) }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        post url, format: :json, answer: attributes_for(:answer)
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns 401 status if access_token is not valid' do
-        post url, format: :json, access_token: '1234', answer: attributes_for(:answer)
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API Authenticable'
 
     context 'authorized' do
       context 'with valid attributes' do
@@ -154,5 +124,8 @@ describe 'Answers API' do
         end
       end
     end
+  end
+  def do_request(path, options = {})
+    get path, { format: :json }.merge(options)
   end
 end

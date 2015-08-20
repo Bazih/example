@@ -4,24 +4,16 @@ describe 'Questions API' do
   let(:access_token) { create(:access_token) }
 
   describe 'GET #index' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is not access_token' do
-        get '/api/v1/questions', format: :json
-        expect(response.status).to eq 401
-      end
+    let(:url) { '/api/v1/questions' }
 
-      it 'returns 401 status if access_token is invalid' do
-        get '/api/v1/questions', format: :json, access_token: '1234'
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like 'API Authenticable'
 
     context 'authorized' do
       let!(:questions) { create_list(:question, 2) }
       let(:question) { questions.first }
       let!(:answer) { create(:answer, question: question) }
 
-      before { get '/api/v1/questions', format: :json, access_token: access_token.token }
+      before { get url, format: :json, access_token: access_token.token }
 
       it 'returns 200 status code' do
         expect(response).to be_success
@@ -59,17 +51,7 @@ describe 'Questions API' do
     let!(:question) { create(:question) }
     let(:url) { api_v1_question_path(question) }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get url, format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns 401 status if access_token is not valid' do
-        get url, format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API Authenticable'
 
     context 'authorized' do
       let!(:attach) { create(:attachment, attachmentable: question) }
@@ -118,17 +100,7 @@ describe 'Questions API' do
     let(:url) { api_v1_questions_path }
     let(:current_user) { User.find(access_token.resource_owner_id) }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        post url, format: :json, question: attributes_for(:question)
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns 401 status if access_token is not valid' do
-        post url, format: :json, access_token: '1234', question: attributes_for(:question)
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API Authenticable'
 
     context 'authorized' do
       context 'with valid attributes' do
@@ -165,5 +137,9 @@ describe 'Questions API' do
         end
       end
     end
+  end
+
+  def do_request(path, options = {})
+    get path, { format: :json }.merge(options)
   end
 end
