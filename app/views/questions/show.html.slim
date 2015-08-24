@@ -3,6 +3,11 @@
     h1= @question.title
     = render 'votes/rating', votable: @question, vote: @question.user_vote(current_user)
   .container
+    - if can?(:create, Subscription.new(question: @question))
+      =link_to 'Subscribe', question_subscriptions_path(@question), remote: true, method: :post, class: 'subscribe'
+    - elsif subscribed?
+      i.glyphicon.glyphicon-ok Subscribed
+  .container
     h3= @question.body
   .container.attach
     = render 'attachments/attach', attach: @question
@@ -17,6 +22,7 @@
   .container
     h3 Comments:
     = render 'comments/comments', commentable: @question
+
 
 .row
   .container

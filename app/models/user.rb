@@ -8,7 +8,8 @@ class User < ActiveRecord::Base
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :votes, dependent: :destroy
-  has_many :authorizations
+  has_many :authorizations, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   AVATAR_SIZES = {
       micro: 16,
@@ -56,5 +57,9 @@ class User < ActiveRecord::Base
 
   def owns?(object)
     id == object.user_id
+  end
+
+  def subscribed_to?(question)
+    Subscription.exists?(user: self, question: question)
   end
 end

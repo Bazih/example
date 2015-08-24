@@ -42,5 +42,21 @@ RSpec.describe Answer, type: :model do
       expect(answer.best).to eq false
     end
   end
+
   it_behaves_like 'commentable'
+
+  describe 'question subscribers notifications' do
+    subject { build(:answer) }
+
+    it 'should call notification job after create' do
+      expect(AnswerNotificationsJob).to receive(:perform_later).with(subject)
+      subject.save!
+    end
+
+    it 'should not call notification job after update' do
+      subject.save!
+      expect(AnswerNotificationsJob).to_not receive(:perform_later)
+      subject.touch
+    end
+  end
 end
