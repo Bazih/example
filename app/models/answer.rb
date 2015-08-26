@@ -3,7 +3,7 @@ class Answer < ActiveRecord::Base
   include Votable
   include Commentable
 
-  default_scope { order('best DESC') }
+  default_scope { order('best DESC, created_at ASC') }
 
   belongs_to :question
   belongs_to :user

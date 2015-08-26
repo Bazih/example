@@ -2,9 +2,8 @@ class DailyDigestJob < ActiveJob::Base
   queue_as :default
 
   def perform
-    questions = Question.yesterday
     User.find_each do |user|
-      DailyMailer.digest(user, questions).deliver_now
+      DailyMailer.digest(user).deliver_later
     end
   end
 end
