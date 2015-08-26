@@ -20,6 +20,12 @@ public/system
 public/tmp
 public/spec
 
+/coverage
+
+*.sublime-project
+*.sublime-workspace
+certs/
+
 .DS_Store
 
 dump.rdb
