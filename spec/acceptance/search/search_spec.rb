@@ -23,6 +23,7 @@ feature 'User can search', %q{
 
       fill_in 'search_query', with: 'test!'
       select 'All', from: 'search_filter'
+      save_and_open_page
       click_on 'Search'
 
       within '.result' do
