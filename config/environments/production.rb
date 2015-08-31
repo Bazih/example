@@ -81,9 +81,7 @@ Rails.application.configure do
 
   # Email
   config.action_mailer.perform_deliveries = true
-  # config.email_default_from = 'notifier@fanfr.ddns.net'
-  config.action_mailer.default_options = { from: 'notifier@fanfr.ddns.net' }
+  config.email_default_from = 'notifier@fanfr.ddns.net'
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.default_url_options = { host: config.app_domain }
-  config.action_mailer.logger = true
 end
