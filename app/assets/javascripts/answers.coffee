@@ -11,7 +11,7 @@ $ ->
       $('form#edit-answer-' + answer_id).show()
 
   $(document).ready ready_answer
-  $(document).on 'page:load', ready_answer
+  $(document).on('page:load', ready_answer)
   $(document).on('page:update', ready_answer)
 
   addAnswer = (data) ->
