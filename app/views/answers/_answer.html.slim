@@ -1,31 +1,32 @@
 - if answer.persisted?
-  .answer.container id = "answer_#{answer.id}"
-    hr
-      .container.rating id="answer-#{answer.id}"
-        = render 'votes/rating', votable: answer, vote: answer.user_vote(current_user)
+  - cache answer
+    .answer.container id = "answer_#{answer.id}"
+      hr
+        .container.rating id="answer-#{answer.id}"
+          = render 'votes/rating', votable: answer, vote: answer.user_vote(current_user)
 
-      .container.update
-        .col-xs-1.text-center= answer.id
-        .col-xs-3.text-center= answer.body
-        -if can?(:best, answer)
-          .col-xs-1.text-center.text-success=answer.best ?  'Best' : link_to('Best answer', best_answer_path(answer.id),
-                                                                             method: :post, remote: true, class: 'btn btn-xs btn-success')
-        - if can?(:update, answer)
-          .col-xs-3.text-center
-            =form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-              p=f.label :body, 'Text answer'
-              .answer-errors
-                ul
-              p=f.text_area :body
-              p=f.submit 'Save'
-          .col-xs-1.text-center= link_to 'Edit answer', '', class: 'edit-button-answer btn btn-xs btn-warning',
-                             data: { answer_id: answer.id }
-        - if can?(:destroy, answer)
-          .col-xs-1.text-center= link_to 'Delete answer', answer, method: :delete, class: 'btn btn-xs btn-warning', remote: true
+        .container.update
+          .col-xs-1.text-center= answer.id
+          .col-xs-3.text-center= answer.body
+          - if can?(:best, answer)
+            .col-xs-1.text-center.text-success=answer.best ?  'Best' : link_to('Best answer', best_answer_path(answer.id),
+                                                                               method: :post, remote: true, class: 'btn btn-xs btn-success')
+          - if can?(:update, answer)
+            .col-xs-3.text-center
+              =form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+                p=f.label :body, 'Text answer'
+                .answer-errors
+                  ul
+                p=f.text_area :body
+                p=f.submit 'Save'
+            .col-xs-1.text-center= link_to 'Edit answer', '', class: 'edit-button-answer btn btn-xs btn-warning',
+                               data: { answer_id: answer.id }
+          - if can?(:destroy, answer)
+            .col-xs-1.text-center= link_to 'Delete answer', answer, method: :delete, class: 'btn btn-xs btn-warning', remote: true
 
-      .container.attache
-        = render 'attachments/attach', attach: answer
+        .container.attache
+          = render 'attachments/attach', attach: answer
 
-      .container
-        h4 Comments:
-        = render 'comments/comments', commentable: answer
+        .container
+          h4 Comments:
+          = render 'comments/comments', commentable: answer

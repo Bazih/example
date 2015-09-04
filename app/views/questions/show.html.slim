@@ -1,63 +1,65 @@
-.row.question data={user_id: "#{@question.user_id}"} id="question_#{@question.id}"
-  .container
-    h1= @question.title
-    = render 'votes/rating', votable: @question, vote: @question.user_vote(current_user)
-  .container
-    - if can?(:create, Subscription.new(question: @question))
-      =link_to 'Subscribe', question_subscriptions_path(@question), remote: true, method: :post, class: 'subscribe'
-    - elsif subscribed?
-      i.glyphicon.glyphicon-ok Subscribed
-  .container
-    h3= @question.body
-  .container.attach
-    = render 'attachments/attach', attach: @question
-  .container
-    .notice
-    =render 'form', remote: true
+- cache @question do
+  .row.question data={user_id: "#{@question.user_id}"} id="question_#{@question.id}"
     .container
-      -if can?(:crud, @question)
-        =link_to 'Edit question', '', class: 'edit-button-question btn btn-sm btn-warning'
-      -if can?(:crud, @question)
-        =link_to 'Delete question', @question, method: :delete, class: 'btn btn-sm btn-warning'
-  .container
-    h3 Comments:
-    = render 'comments/comments', commentable: @question
-
-
-.row
-  .container
-    .col-md-8
-      h2 Answers:
-.row
-  .container
-.row.answers data={question_id: "#{@question.id}"}
-  = render @question.answers
-
-.row
-  .container
-    .notice
-
-- if can?(:create, @answer)
-  .row.new_answer
+      h1= @question.title
+      = render 'votes/rating', votable: @question, vote: @question.user_vote(current_user)
     .container
-      h3 Create new answer
+      - if can?(:create, Subscription.new(question: @question))
+        - cache cache_key_for_user(@question, 'question-subscription') do
+          =link_to 'Subscribe', question_subscriptions_path(@question), remote: true, method: :post, class: 'subscribe'
+      - elsif subscribed?
+        i.glyphicon.glyphicon-ok Subscribed
     .container
-      .col-md-8.text-left
-        = form_for [@question, @answer], remote: true, data: { type: :json } do |f|
-          p= f.label :body, 'Enter your answer:'
-          .answer-errors
-            ul.error-messages.block
-          p= f.text_area :body
-          p Attachment:
-          = f.fields_for :attachments, @answer.attachments.build, data: { type: :json } do |attachment|
-            = render 'answers/attachment_fields_a', :f => attachment
-            .links
-              = link_to_add_association 'add attachment', f, :attachments
-          p= f.submit 'Save answer'
+      h3= @question.body
+    .container.attach
+      = render 'attachments/attach', attach: @question
+    .container
+      .notice
+      =render 'form', remote: true
+      .container
+        -if can?(:crud, @question)
+          =link_to 'Edit question', '', class: 'edit-button-question btn btn-sm btn-warning'
+        -if can?(:crud, @question)
+          =link_to 'Delete question', @question, method: :delete, class: 'btn btn-sm btn-warning'
+    .container
+      h3 Comments:
+      = render 'comments/comments', commentable: @question
 
-.row
-  .container
-    .col-md-1= link_to 'To questions', questions_path, class: 'btn btn-default'
+
+  .row
+    .container
+      .col-md-8
+        h2 Answers:
+  .row
+    .container
+  .row.answers data={question_id: "#{@question.id}"}
+    = render @question.answers
+
+  .row
+    .container
+      .notice
+
+  - if can?(:create, @answer)
+    .row.new_answer
+      .container
+        h3 Create new answer
+      .container
+        .col-md-8.text-left
+          = form_for [@question, @answer], remote: true, data: { type: :json } do |f|
+            p= f.label :body, 'Enter your answer:'
+            .answer-errors
+              ul.error-messages.block
+            p= f.text_area :body
+            p Attachment:
+            = f.fields_for :attachments, @answer.attachments.build, data: { type: :json } do |attachment|
+              = render 'answers/attachment_fields_a', :f => attachment
+              .links
+                = link_to_add_association 'add attachment', f, :attachments
+            p= f.submit 'Save answer'
+
+  .row
+    .container
+      .col-md-1= link_to 'To questions', questions_path, class: 'btn btn-default'
 
 = subscribe_to "/questions/#{@question.id}/answers"
 = subscribe_to "/questions/#{@question.id}/comments"
