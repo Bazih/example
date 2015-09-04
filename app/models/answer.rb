@@ -5,7 +5,7 @@ class Answer < ActiveRecord::Base
 
   default_scope { order('best DESC, created_at ASC') }
 
-  belongs_to :question
+  belongs_to :question, touch: true
   belongs_to :user
 
   validates :body, :question_id, :user_id, presence: true

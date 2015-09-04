@@ -1,19 +1,18 @@
 .row
   b class="col-sm-1" id="rating-value-#{votable.id}" Rating: #{votable.rating}
   - if user_signed_in? && current_user.id != votable.user_id
+    - cache votable do
+      = link_to polymorphic_path(votable, action: 'vote_up'),
+                  method: :patch, remote: true, data: { type: :json }, class: 'vote-link col-sm-1',
+                  id: "vote_up_#{votable.id}", style: ('display:none' if votable.voted_by?(current_user))
+        i.glyphicon.glyphicon-plus  Up
 
+      = link_to polymorphic_path(votable, action: 'vote_down'),
+                  method: :patch, remote: true, data: { type: :json }, class: 'vote-link col-sm-1',
+                  id: "vote_down_#{votable.id}", style: ('display:none' if votable.voted_by?(current_user))
+        i.glyphicon.glyphicon-minus  Down
 
-    = link_to polymorphic_path(votable, action: 'vote_up'),
-                method: :patch, remote: true, data: { type: :json }, class: 'vote-link col-sm-1',
-                id: "vote_up_#{votable.id}", style: ('display:none' if votable.voted_by?(current_user))
-      i.glyphicon.glyphicon-plus  Up
-
-    = link_to polymorphic_path(votable, action: 'vote_down'),
-                method: :patch, remote: true, data: { type: :json }, class: 'vote-link col-sm-1',
-                id: "vote_down_#{votable.id}", style: ('display:none' if votable.voted_by?(current_user))
-      i.glyphicon.glyphicon-minus  Down
-
-    i.vote-cancel id="vote_cancel_#{votable.id}" style=('display:none' unless votable.voted_by?(current_user))
-      | Voted #{vote.present? && vote.value == 1 ? 'up' : 'down'}
-      = link_to '(Cancel)', polymorphic_path(votable, action: 'vote_cancel'),
-                method: :delete, remote: true, data: { type: :json }
+      i.vote-cancel id="vote_cancel_#{votable.id}" style=('display:none' unless votable.voted_by?(current_user))
+        | Voted #{vote.present? && vote.value == 1 ? 'up' : 'down'}
+        = link_to '(Cancel)', polymorphic_path(votable, action: 'vote_cancel'),
+                  method: :delete, remote: true, data: { type: :json }

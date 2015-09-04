@@ -4,16 +4,12 @@
 
 .row
   .container.questions
-    -@questions.each do |question|
-      hr
-        .container data={user_id: "#{question.user_id}"}
-          .col-md-4
-            =link_to question.title, question_path(question)
-          -if current_user && question.user_id == current_user.id
-            /.col-md-2.text-center
-            /  = link_to 'Edit', '', class: "question_id_#{question.id} btn btn-sm btn-warning"
-            .col-md-2
-              = link_to 'Delete question', question_path(question), method: :delete, class: 'btn btn-xs btn-warning'
+    - cache collection_cache_key_for :question do
+      -@questions.each do |question|
+        hr
+          .container data={user_id: "#{question.user_id}"}
+            .col-md-4
+              =link_to question.title, question_path(question)
 
 -if can?(:create, Question)
   .row
